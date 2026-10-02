@@ -102,6 +102,17 @@ const entries: Entry[] = [
     explanation:
       'She first went viral with a "Things I Wish I Knew At 25" video giving advice from her past experiences.',
   },
+  {
+    text: "[Placeholder Hard question]",
+    difficulty: "Hard",
+    answers: [
+      "[Placeholder correct answer]",
+      "[Placeholder wrong answer A]",
+      "[Placeholder wrong answer B]",
+      "[Placeholder wrong answer C]",
+    ],
+    explanation: "[Placeholder explanation]",
+  },
 ];
 
 export const mockQuestions: QuestionWithAnswers[] = entries.map((e, i) => {
