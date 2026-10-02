@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Quiz {
+  id    String @id @default(cuid())
+  slug  String @unique
+  title String
+
+  questions   Question[]
+  submissions QuestionSubmission[]
+}
+
+model Question {
+  id          String  @id @default(cuid())
+  quizId      String
+  text        String
+  difficulty  String
+  approved    Boolean @default(false)
+  explanation String?
+
+  quiz    Quiz     @relation(fields: [quizId], references: [id])
+  answers Answer[]
+
+  @@index([quizId])
+}
+
+model Answer {
+  id         String  @id @default(cuid())
+  questionId String
+  text       String
+  isCorrect  Boolean @default(false)
+
+  question Question @relation(fields: [questionId], references: [id])
+
+  @@index([questionId])
+}
+
+enum SubmissionStatus {
+  pending
+  approved
+  rejected
+}
+
+model QuestionSubmission {
+  id          String           @id @default(cuid())
+  quizId      String
+  text        String
+  difficulty  String
+  /// Array of { text: string, isCorrect: boolean }, same shape as Answer.
+  answers     Json
+  explanation String?
+  status      SubmissionStatus @default(pending)
+  createdAt   DateTime         @default(now())
+
+  quiz Quiz @relation(fields: [quizId], references: [id])
+
+  @@index([quizId])
+}

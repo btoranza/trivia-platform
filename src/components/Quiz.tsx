@@ -53,6 +53,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
   const question = game[index];
   const revealed = pickedId !== null;
   const isLast = index === total - 1;
+  const hasExplanation = revealed && Boolean(question.explanation);
   const pickedCorrect = question.answers.some(
     (a) => a.id === pickedId && a.isCorrect,
   );
@@ -111,22 +112,32 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
           />
         ))}
       </div>
-      {revealed && question.explanation && (
-        <Card>
-          <p className="text-xs font-bold uppercase tracking-wide">
-            {pickedCorrect
-              ? config.labels.explanationRight
-              : config.labels.explanationWrong}
-          </p>
-          <p className="mt-1 text-base font-medium">{question.explanation}</p>
-        </Card>
-      )}
       <div className="flex-1" />
-      <div className="min-h-16 md:ml-auto md:w-72">
+      <div className="flex min-h-16 items-end gap-4">
+        {hasExplanation && (
+          <div className="min-w-0 flex-1">
+            <Card>
+              <p className="text-xs font-bold uppercase tracking-wide">
+                {pickedCorrect
+                  ? config.labels.explanationRight
+                  : config.labels.explanationWrong}
+              </p>
+              <p className="mt-1 text-sm font-medium">{question.explanation}</p>
+            </Card>
+          </div>
+        )}
         {revealed && (
-          <Button onClick={next}>
-            {isLast ? config.labels.seeResults : config.labels.next}
-          </Button>
+          <div
+            className={
+              hasExplanation
+                ? "w-32 shrink-0 md:w-48"
+                : "w-full md:ml-auto md:w-72"
+            }
+          >
+            <Button onClick={next}>
+              {isLast ? config.labels.seeResults : config.labels.next}
+            </Button>
+          </div>
         )}
       </div>
     </main>
