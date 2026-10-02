@@ -112,8 +112,8 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
           />
         ))}
       </div>
-      <div className="flex-1" />
-      <div className="flex min-h-16 items-end gap-4">
+      <div className="flex-1 md:hidden" />
+      <div className="flex min-h-16 items-end gap-4 md:items-center">
         {hasExplanation && (
           <div className="min-w-0 flex-1">
             <Card>
