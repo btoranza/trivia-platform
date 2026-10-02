@@ -3,12 +3,25 @@ import { Card } from "@/components/Card";
 import { DifficultyPicker } from "@/components/DifficultyPicker";
 import { Sticker } from "@/components/Sticker";
 import { triviaConfig as config } from "@/config/trivia";
-import { parseDifficulty } from "@/lib/quiz";
+import { getQuestions } from "@/lib/questions";
+import {
+  filterByDifficulty,
+  formatTemplate,
+  parseDifficulty,
+} from "@/lib/quiz";
 
 export default async function Home({ searchParams }: PageProps<"/">) {
   const difficulty = parseDifficulty(
     (await searchParams).difficulty,
     config.difficulties,
+  );
+  const pool = filterByDifficulty(await getQuestions(config.slug), difficulty);
+  const count = Math.min(pool.length, config.questionsPerGame);
+  const difficultyInfo = formatTemplate(
+    difficulty
+      ? config.labels.difficultyInfo
+      : config.labels.difficultyInfoRandom,
+    { count, difficulty: difficulty ?? "" },
   );
   const quizHref = difficulty
     ? `/quiz?difficulty=${encodeURIComponent(difficulty)}`
@@ -36,6 +49,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
             randomLabel={config.labels.randomDifficulty}
             selected={difficulty}
           />
+          <p className="mt-3 text-sm font-bold">{difficultyInfo}</p>
         </Card>
       </div>
       <div className="flex-1 md:hidden" />
@@ -46,7 +60,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </Button>
       </div>
       <p className="text-center text-sm font-bold md:col-start-2">
-        {config.questionsPerGame} questions · {config.labels.credit}
+        {count} questions · {config.labels.credit}
       </p>
     </main>
   );

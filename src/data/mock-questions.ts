@@ -13,6 +13,7 @@ type Entry = {
 
 const entries: Entry[] = [
   {
+    creditName: "Test User",
     text: 'What does she call herself "the brunette ___ of San Francisco"?',
     difficulty: "Easy",
     answers: ["Carrie Bradshaw", "Bridget Jones", "Elle Woods", "Rachel Green"],
@@ -50,6 +51,7 @@ const entries: Entry[] = [
       "Before revealing him, she had been teasing a romance with a Brazilian man all summer.",
   },
   {
+    creditName: "Test User",
     text: "What job did she quit to go full-time on social media?",
     difficulty: "Medium",
     answers: ["Tech sales", "Marketing", "Nursing", "Real estate"],

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { triviaConfig as config, type ResultTier } from "@/config/trivia";
-import { formatShareText } from "@/lib/quiz";
+import { formatTemplate } from "@/lib/quiz";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { HomeLink } from "./HomeLink";
@@ -20,7 +20,7 @@ export function Results({ score, total, tier, onRestart }: Props) {
 
   async function share() {
     const url = window.location.origin;
-    const text = formatShareText(config.shareText, {
+    const text = formatTemplate(config.shareText, {
       score,
       total,
       title: config.title,

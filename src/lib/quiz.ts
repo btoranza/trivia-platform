@@ -38,7 +38,7 @@ export function getTier(
   );
 }
 
-export function formatShareText(
+export function formatTemplate(
   template: string,
   values: Record<string, string | number>,
 ): string {
