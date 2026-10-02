@@ -108,6 +108,14 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
           />
         ))}
       </div>
+      {revealed && question.explanation && (
+        <Card>
+          <p className="text-xs font-bold uppercase tracking-wide">
+            {config.labels.explanation}
+          </p>
+          <p className="mt-1 text-base font-medium">{question.explanation}</p>
+        </Card>
+      )}
       <div className="flex-1" />
       <div className="min-h-16 md:ml-auto md:w-72">
         {revealed && (

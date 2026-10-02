@@ -31,6 +31,7 @@ export type TriviaConfig = {
     submitPlaceholder: string;
     back: string;
     home: string;
+    explanation: string;
     chooseDifficulty: string;
     randomDifficulty: string;
   };
@@ -65,6 +66,7 @@ export const triviaConfig = {
     submitPlaceholder: "The submission form is coming soon.",
     back: "← Back home",
     home: "← Home",
+    explanation: "Did you know?",
     chooseDifficulty: "Difficulty",
     randomDifficulty: "Random",
   },

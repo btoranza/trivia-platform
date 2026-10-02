@@ -19,6 +19,7 @@ export type Question = {
   text: string;
   difficulty: string;
   approved: boolean;
+  explanation?: string | null;
 };
 
 /** A question together with its answers, as returned by getQuestions. */
