@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens. Components use only these (never raw hex), so a different
+ * trivia can re-skin the app by editing this block.
+ * Font families come from next/font variables set in layout.tsx.
+ */
+@theme {
+  --color-canvas: #ffd43b;
+  --color-ink: #111111;
+  --color-accent: #ff6fb5;
+  --color-surface: #ffffff;
+  --color-correct: #3ddc84;
+
+  --font-display: var(--font-archivo-black), sans-serif;
+  --font-sans: var(--font-space-grotesk), sans-serif;
+
+  --radius-pill: 999px;
+
+  --offset-lg: 6px;
+  --offset-md: 5px;
+  --offset-sm: 4px;
+  --offset-badge: 8px;
+
+  --shadow-lg: var(--offset-lg) var(--offset-lg) 0 var(--color-ink);
+  --shadow-md: var(--offset-md) var(--offset-md) 0 var(--color-ink);
+  --shadow-md-hover: 7px 7px 0 var(--color-ink);
+  --shadow-sm: var(--offset-sm) var(--offset-sm) 0 var(--color-ink);
+  --shadow-badge: var(--offset-badge) var(--offset-badge) 0 var(--color-ink);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --border-w: 3px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@utility border-brutal {
+  border: var(--border-w) solid var(--color-ink);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background: var(--color-canvas);
+  }
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Pressable hard-shadow element: grows on hover, "sinks" on active or when data-sunk. */
+@layer components {
+  .press {
+    box-shadow: var(--shadow-md);
+    transition:
+      transform 80ms,
+      box-shadow 80ms;
+  }
+  .press:hover:not(:disabled):not([aria-disabled="true"]) {
+    box-shadow: var(--shadow-md-hover);
+  }
+  .press:active:not(:disabled):not([aria-disabled="true"]),
+  .press[data-sunk="true"] {
+    box-shadow: none;
+    transform: translate(var(--offset-md), var(--offset-md));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .press {
+      transition: none;
+    }
+  }
 }
