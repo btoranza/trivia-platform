@@ -8,6 +8,7 @@ import { AnswerOption, type AnswerState } from "./AnswerOption";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Chip } from "./Chip";
+import { HomeLink } from "./HomeLink";
 import { ProgressBar } from "./ProgressBar";
 import { Results } from "./Results";
 
@@ -67,7 +68,10 @@ export function Quiz({ questions, initialGame }: Props) {
   }
 
   return (
-    <main className="flex flex-1 flex-col gap-5">
+    <main className="mx-auto flex w-full flex-1 flex-col gap-5 md:max-w-2xl">
+      <div>
+        <HomeLink />
+      </div>
       <div className="flex items-center justify-between">
         <Chip>
           {config.labels.questionPrefix} {index + 1}/{total}
@@ -79,11 +83,14 @@ export function Quiz({ questions, initialGame }: Props) {
         label={`${config.labels.questionPrefix} ${index + 1}/${total}`}
       />
       <Card>
-        <h1 className="font-display text-[30px] leading-[1.05] tracking-tight">
+        <h1 className="font-display text-[30px] leading-[1.05] md:text-[38px] tracking-tight">
           {question.text}
         </h1>
       </Card>
-      <div className="flex flex-col gap-[14px]" key={question.id}>
+      <div
+        className="grid grid-cols-1 gap-[14px] md:grid-cols-2"
+        key={question.id}
+      >
         {question.answers.map((a) => (
           <AnswerOption
             key={a.id}
@@ -98,7 +105,7 @@ export function Quiz({ questions, initialGame }: Props) {
         ))}
       </div>
       <div className="flex-1" />
-      <div className="min-h-16">
+      <div className="min-h-16 md:ml-auto md:w-72">
         {revealed && (
           <Button onClick={next}>
             {isLast ? config.labels.seeResults : config.labels.next}

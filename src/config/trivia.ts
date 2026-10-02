@@ -30,6 +30,7 @@ export type TriviaConfig = {
     submitTitle: string;
     submitPlaceholder: string;
     back: string;
+    home: string;
   };
   /** Placeholders: {score}, {total}, {title}, {tier}, {url}. */
   shareText: string;
@@ -39,7 +40,8 @@ export type TriviaConfig = {
 export const triviaConfig = {
   slug: "danielle-trivia",
   title: "Danielle Trivia",
-  description: "How well do you know the community? Ten questions. No pressure. (Some pressure.)",
+  description:
+    "How well do you know the community? Ten questions. No pressure. (Some pressure.)",
   questionsPerGame: 10,
   difficulties: ["Easy", "Medium", "Hard"],
   labels: {
@@ -60,6 +62,7 @@ export const triviaConfig = {
     submitTitle: "Submit a question",
     submitPlaceholder: "The submission form is coming soon.",
     back: "← Back home",
+    home: "← Home",
   },
   shareText: "I got {score}/{total} on {title} — I'm a {tier}. {url}",
   tiers: [
@@ -91,7 +94,8 @@ export const triviaConfig = {
       min: 100,
       max: 100,
       title: "You need to touch grass",
-      message: "Perfect score. Please go outside. We are worried and impressed.",
+      message:
+        "Perfect score. Please go outside. We are worried and impressed.",
     },
   ],
 } satisfies TriviaConfig;

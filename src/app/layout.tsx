@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${archivoBlack.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <div className="mx-auto flex min-h-dvh w-full max-w-[420px] flex-col px-5 py-6">
+        <div className="mx-auto flex min-h-dvh w-full max-w-[420px] flex-col px-5 py-6 md:max-w-5xl md:px-10 md:py-10">
           {children}
         </div>
       </body>
