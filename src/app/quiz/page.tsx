@@ -8,7 +8,11 @@ export default async function QuizPage({ searchParams }: PageProps<"/quiz">) {
   // Opt out of static prerendering so each visit gets a fresh shuffle.
   await connection();
   const params = await searchParams;
-  const difficulty = parseDifficulty(params.difficulty, config.difficulties);
+  const difficulty = parseDifficulty(
+    params.difficulty,
+    config.difficulties,
+    config.defaultDifficulty,
+  );
   const pool = filterByDifficulty(
     await getQuestions(config.slug),
     difficulty,

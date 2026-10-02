@@ -46,25 +46,25 @@ export function formatTemplate(
   );
 }
 
-/** Returns the difficulty if it is one of the allowed ones, otherwise null (random). */
+/** Returns the difficulty if it is one of the allowed ones, otherwise the fallback. */
 export function parseDifficulty(
   value: string | string[] | undefined,
   allowed: readonly string[],
-): string | null {
+  fallback: string,
+): string {
   const v = Array.isArray(value) ? value[0] : value;
-  return v && allowed.includes(v) ? v : null;
+  return v && allowed.includes(v) ? v : fallback;
 }
 
 /**
  * Difficulties included when playing at `difficulty`. Levels are cumulative:
  * the order of `difficulties` is easiest to hardest, and a level includes
- * itself and every easier one. Random (null) includes all of them.
+ * itself and every easier one.
  */
 export function includedDifficulties(
-  difficulty: string | null,
+  difficulty: string,
   difficulties: readonly string[],
 ): string[] {
-  if (difficulty === null) return [...difficulties];
   return difficulties.slice(0, difficulties.indexOf(difficulty) + 1);
 }
 
@@ -74,7 +74,7 @@ export function includedDifficulties(
  */
 export function filterByDifficulty(
   questions: readonly QuestionWithAnswers[],
-  difficulty: string | null,
+  difficulty: string,
   difficulties: readonly string[],
 ): QuestionWithAnswers[] {
   const included = includedDifficulties(difficulty, difficulties);

@@ -13,6 +13,8 @@ export type TriviaConfig = {
   questionsPerGame: number;
   /** Ordered from easiest to hardest; each level includes the easier ones. */
   difficulties: readonly string[];
+  /** Preselected on the Home screen; must be one of `difficulties`. */
+  defaultDifficulty: string;
   labels: {
     sticker: string;
     start: string;
@@ -34,11 +36,9 @@ export type TriviaConfig = {
     home: string;
     explanationRight: string;
     difficultyInfo: string;
-    difficultyInfoRandom: string;
     submittedBy: string;
     explanationWrong: string;
     chooseDifficulty: string;
-    randomDifficulty: string;
   };
   /** Placeholders: {score}, {total}, {title}, {tier}, {url}. */
   shareText: string;
@@ -52,6 +52,7 @@ export const triviaConfig = {
     "How well do you know the community? Ten questions. No pressure. (Some pressure.)",
   questionsPerGame: 10,
   difficulties: ["Easy", "Medium", "Hard"],
+  defaultDifficulty: "Medium",
   labels: {
     sticker: "A STUPID IDEA",
     start: "START QUIZ →",
@@ -73,11 +74,9 @@ export const triviaConfig = {
     home: "← Home",
     explanationRight: "That's right!",
     difficultyInfo: "{count} questions · {levels}",
-    difficultyInfoRandom: "{count} questions · mixed difficulties",
     submittedBy: "Submitted by",
     explanationWrong: "Did you know?",
     chooseDifficulty: "Difficulty",
-    randomDifficulty: "Random",
   },
   shareText: "I got {score}/{total} on {title} — I'm a {tier}. {url}",
   tiers: [

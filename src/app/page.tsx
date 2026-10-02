@@ -15,6 +15,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const difficulty = parseDifficulty(
     (await searchParams).difficulty,
     config.difficulties,
+    config.defaultDifficulty,
   );
   const pool = filterByDifficulty(
     await getQuestions(config.slug),
@@ -22,18 +23,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     config.difficulties,
   );
   const count = Math.min(pool.length, config.questionsPerGame);
-  const difficultyInfo = formatTemplate(
-    difficulty
-      ? config.labels.difficultyInfo
-      : config.labels.difficultyInfoRandom,
-    {
-      count,
-      levels: includedDifficulties(difficulty, config.difficulties).join(" + "),
-    },
-  );
-  const quizHref = difficulty
-    ? `/quiz?difficulty=${encodeURIComponent(difficulty)}`
-    : "/quiz";
+  const difficultyInfo = formatTemplate(config.labels.difficultyInfo, {
+    count,
+    levels: includedDifficulties(difficulty, config.difficulties).join(" + "),
+  });
+  const quizHref = `/quiz?difficulty=${encodeURIComponent(difficulty)}`;
   return (
     <main className="flex flex-1 flex-col gap-6 md:grid md:flex-none md:grid-cols-2 md:content-center md:gap-x-14 md:gap-y-6 md:my-auto">
       <div className="flex flex-col gap-6 md:col-start-1 md:row-span-3 md:justify-center">
@@ -54,7 +48,6 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <DifficultyPicker
             label={config.labels.chooseDifficulty}
             options={config.difficulties}
-            randomLabel={config.labels.randomDifficulty}
             selected={difficulty}
           />
           <p className="mt-3 text-sm font-bold">{difficultyInfo}</p>
