@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { DifficultyPicker } from "@/components/DifficultyPicker";
@@ -63,7 +64,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </Button>
       </div>
       <p className="text-center text-sm font-bold md:col-start-2">
-        {count} questions · {config.labels.credit}
+        {count} questions · {config.labels.credit} ·{" "}
+        <Link href="/credits" className="underline underline-offset-2">
+          {config.labels.credits}
+        </Link>
       </p>
     </main>
   );

@@ -6,6 +6,11 @@ export type ResultTier = {
   message: string;
 };
 
+export type CreditGroup = {
+  role: string;
+  names: readonly string[];
+};
+
 export type TriviaConfig = {
   slug: string;
   title: string;
@@ -34,6 +39,7 @@ export type TriviaConfig = {
     submitPlaceholder: string;
     back: string;
     home: string;
+    credits: string;
     explanationRight: string;
     difficultyInfo: string;
     submittedBy: string;
@@ -42,6 +48,7 @@ export type TriviaConfig = {
   };
   /** Placeholders: {score}, {total}, {title}, {tier}, {url}. */
   shareText: string;
+  credits: readonly CreditGroup[];
   tiers: readonly ResultTier[];
 };
 
@@ -72,12 +79,25 @@ export const triviaConfig = {
     submitPlaceholder: "The submission form is coming soon.",
     back: "Back home",
     home: "Home",
+    credits: "Credits",
     explanationRight: "That's right!",
     difficultyInfo: "{count} questions · {levels}",
     submittedBy: "Submitted by",
     explanationWrong: "Did you know?",
     chooseDifficulty: "Difficulty",
   },
+  credits: [
+    { role: "Developer", names: ["Berenice"] },
+    {
+      role: "Questions submitted by",
+      names: [
+        "[Placeholder name 1]",
+        "[Placeholder name 2]",
+        "[Placeholder name 3]",
+      ],
+    },
+    { role: "Special thanks", names: ["[Placeholder name]"] },
+  ],
   shareText: "I got {score}/{total} on {title} — I'm a {tier}. {url}",
   tiers: [
     {
