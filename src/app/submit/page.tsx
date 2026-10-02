@@ -12,7 +12,7 @@ export default function SubmitPage() {
         <p className="text-lg font-bold">{config.labels.submitPlaceholder}</p>
       </Card>
       <div className="flex-1" />
-      <Button href="/" variant="secondary">
+      <Button href="/" variant="secondary" arrow="left">
         {config.labels.back}
       </Button>
     </main>

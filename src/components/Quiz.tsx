@@ -113,7 +113,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
         ))}
       </div>
       <div className="flex-1 md:hidden" />
-      <div className="flex min-h-16 items-end gap-4 md:items-center">
+      <div className="flex min-h-16 items-center gap-4">
         {hasExplanation && (
           <div className="min-w-0 flex-1">
             <Card>
@@ -139,7 +139,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
                 : "w-full md:ml-auto md:w-72"
             }
           >
-            <Button onClick={next}>
+            <Button onClick={next} arrow={isLast ? undefined : "right"}>
               {isLast ? config.labels.seeResults : config.labels.next}
             </Button>
           </div>

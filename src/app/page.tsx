@@ -55,7 +55,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       </div>
       <div className="flex-1 md:hidden" />
       <div className="flex flex-col gap-4 md:col-start-2">
-        <Button href={quizHref}>{config.labels.start}</Button>
+        <Button href={quizHref} arrow="right">
+          {config.labels.start}
+        </Button>
         <Button href="/submit" variant="secondary">
           {config.labels.submit}
         </Button>
