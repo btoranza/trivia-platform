@@ -53,6 +53,9 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
   const question = game[index];
   const revealed = pickedId !== null;
   const isLast = index === total - 1;
+  const pickedCorrect = question.answers.some(
+    (a) => a.id === pickedId && a.isCorrect,
+  );
 
   function select(answerId: string, isCorrect: boolean) {
     setPickedId(answerId);
@@ -111,7 +114,9 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
       {revealed && question.explanation && (
         <Card>
           <p className="text-xs font-bold uppercase tracking-wide">
-            {config.labels.explanation}
+            {pickedCorrect
+              ? config.labels.explanationRight
+              : config.labels.explanationWrong}
           </p>
           <p className="mt-1 text-base font-medium">{question.explanation}</p>
         </Card>
