@@ -17,13 +17,17 @@ type Props = {
   questions: QuestionWithAnswers[];
   /** First game, shuffled on the server so SSR and client markup match. */
   initialGame: QuestionWithAnswers[];
+  /** Dev shortcut: start on the results screen with this score. */
+  debugScore?: number;
 };
 
-export function Quiz({ questions, initialGame }: Props) {
+export function Quiz({ questions, initialGame, debugScore }: Props) {
   const [game, setGame] = useState(initialGame);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(
+    debugScore === undefined ? 0 : initialGame.length,
+  );
   const [pickedId, setPickedId] = useState<string | null>(null);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(debugScore ?? 0);
 
   const total = game.length;
   const finished = index >= total;
