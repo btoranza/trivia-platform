@@ -33,8 +33,7 @@ export function getTier(
 ): ResultTier {
   const pct = percentage(score, total);
   return (
-    tiers.find((t) => pct >= t.min && pct <= t.max) ??
-    tiers[tiers.length - 1]
+    tiers.find((t) => pct >= t.min && pct <= t.max) ?? tiers[tiers.length - 1]
   );
 }
 
@@ -57,14 +56,28 @@ export function parseDifficulty(
 }
 
 /**
- * Questions of the chosen difficulty, or all of them for random (null).
- * Falls back to the full pool if that difficulty has no questions.
+ * Difficulties included when playing at `difficulty`. Levels are cumulative:
+ * the order of `difficulties` is easiest to hardest, and a level includes
+ * itself and every easier one. Random (null) includes all of them.
+ */
+export function includedDifficulties(
+  difficulty: string | null,
+  difficulties: readonly string[],
+): string[] {
+  if (difficulty === null) return [...difficulties];
+  return difficulties.slice(0, difficulties.indexOf(difficulty) + 1);
+}
+
+/**
+ * Questions allowed at the chosen difficulty (see includedDifficulties).
+ * Falls back to the full pool if none match.
  */
 export function filterByDifficulty(
   questions: readonly QuestionWithAnswers[],
   difficulty: string | null,
+  difficulties: readonly string[],
 ): QuestionWithAnswers[] {
-  if (difficulty === null) return [...questions];
-  const matching = questions.filter((q) => q.difficulty === difficulty);
+  const included = includedDifficulties(difficulty, difficulties);
+  const matching = questions.filter((q) => included.includes(q.difficulty));
   return matching.length > 0 ? matching : [...questions];
 }

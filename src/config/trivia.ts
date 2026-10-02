@@ -11,6 +11,7 @@ export type TriviaConfig = {
   title: string;
   description: string;
   questionsPerGame: number;
+  /** Ordered from easiest to hardest; each level includes the easier ones. */
   difficulties: readonly string[];
   labels: {
     sticker: string;
@@ -71,7 +72,7 @@ export const triviaConfig = {
     back: "← Back home",
     home: "← Home",
     explanationRight: "That's right!",
-    difficultyInfo: "{count} questions · {difficulty} only",
+    difficultyInfo: "{count} questions · {levels}",
     difficultyInfoRandom: "{count} questions · mixed difficulties",
     submittedBy: "Submitted by",
     explanationWrong: "Did you know?",

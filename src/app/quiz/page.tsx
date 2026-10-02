@@ -9,7 +9,11 @@ export default async function QuizPage({ searchParams }: PageProps<"/quiz">) {
   await connection();
   const params = await searchParams;
   const difficulty = parseDifficulty(params.difficulty, config.difficulties);
-  const pool = filterByDifficulty(await getQuestions(config.slug), difficulty);
+  const pool = filterByDifficulty(
+    await getQuestions(config.slug),
+    difficulty,
+    config.difficulties,
+  );
   const initialGame = buildGame(pool, config.questionsPerGame);
   // Dev-only shortcut: /quiz?score=8 jumps straight to the results screen.
   const debugScore =

@@ -7,6 +7,7 @@ import { getQuestions } from "@/lib/questions";
 import {
   filterByDifficulty,
   formatTemplate,
+  includedDifficulties,
   parseDifficulty,
 } from "@/lib/quiz";
 
@@ -15,13 +16,20 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     (await searchParams).difficulty,
     config.difficulties,
   );
-  const pool = filterByDifficulty(await getQuestions(config.slug), difficulty);
+  const pool = filterByDifficulty(
+    await getQuestions(config.slug),
+    difficulty,
+    config.difficulties,
+  );
   const count = Math.min(pool.length, config.questionsPerGame);
   const difficultyInfo = formatTemplate(
     difficulty
       ? config.labels.difficultyInfo
       : config.labels.difficultyInfoRandom,
-    { count, difficulty: difficulty ?? "" },
+    {
+      count,
+      levels: includedDifficulties(difficulty, config.difficulties).join(" + "),
+    },
   );
   const quizHref = difficulty
     ? `/quiz?difficulty=${encodeURIComponent(difficulty)}`
