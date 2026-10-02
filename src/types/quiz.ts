@@ -19,7 +19,9 @@ export type Question = {
   text: string;
   difficulty: string;
   approved: boolean;
-  explanation?: string | null;
+  explanation: string;
+  /** Name shown as credit; null means the author chose to stay anonymous. */
+  creditName?: string | null;
 };
 
 /** A question together with its answers, as returned by getQuestions. */

@@ -7,7 +7,8 @@ type Entry = {
   difficulty: string;
   /** First answer is the correct one; the rest are wrong. */
   answers: [string, string, string, string];
-  explanation?: string;
+  explanation: string;
+  creditName?: string;
 };
 
 const entries: Entry[] = [
@@ -110,6 +111,7 @@ export const mockQuestions: QuestionWithAnswers[] = entries.map((e, i) => {
     difficulty: e.difficulty,
     approved: true,
     explanation: e.explanation,
+    creditName: e.creditName ?? null,
     answers: e.answers.map((text, j) => ({
       id: `${id}-a${j + 1}`,
       questionId: id,

@@ -53,7 +53,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
   const question = game[index];
   const revealed = pickedId !== null;
   const isLast = index === total - 1;
-  const hasExplanation = revealed && Boolean(question.explanation);
+  const hasExplanation = revealed;
   const pickedCorrect = question.answers.some(
     (a) => a.id === pickedId && a.isCorrect,
   );
@@ -123,6 +123,11 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
                   : config.labels.explanationWrong}
               </p>
               <p className="mt-1 text-sm font-medium">{question.explanation}</p>
+              {question.creditName && (
+                <p className="mt-2 text-xs font-bold">
+                  {config.labels.submittedBy} {question.creditName}
+                </p>
+              )}
             </Card>
           </div>
         )}

@@ -32,6 +32,7 @@ export type TriviaConfig = {
     back: string;
     home: string;
     explanationRight: string;
+    submittedBy: string;
     explanationWrong: string;
     chooseDifficulty: string;
     randomDifficulty: string;
@@ -68,6 +69,7 @@ export const triviaConfig = {
     back: "← Back home",
     home: "← Home",
     explanationRight: "That's right!",
+    submittedBy: "Submitted by",
     explanationWrong: "Did you know?",
     chooseDifficulty: "Difficulty",
     randomDifficulty: "Random",
