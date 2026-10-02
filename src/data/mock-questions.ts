@@ -42,7 +42,7 @@ export const mockQuestions: QuestionWithAnswers[] = [
     ["Almonds", false],
     ["Cashews", false],
   ]),
-  ...Array.from({ length: 11 }, (_, i) =>
-    placeholder(i + 2, difficulties[i % difficulties.length]),
+  ...Array.from({ length: 29 }, (_, i) =>
+    placeholder(i + 2, difficulties[(i + 1) % difficulties.length]),
   ),
 ];

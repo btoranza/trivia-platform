@@ -46,3 +46,25 @@ export function formatShareText(
     key in values ? String(values[key]) : m,
   );
 }
+
+/** Returns the difficulty if it is one of the allowed ones, otherwise null (random). */
+export function parseDifficulty(
+  value: string | string[] | undefined,
+  allowed: readonly string[],
+): string | null {
+  const v = Array.isArray(value) ? value[0] : value;
+  return v && allowed.includes(v) ? v : null;
+}
+
+/**
+ * Questions of the chosen difficulty, or all of them for random (null).
+ * Falls back to the full pool if that difficulty has no questions.
+ */
+export function filterByDifficulty(
+  questions: readonly QuestionWithAnswers[],
+  difficulty: string | null,
+): QuestionWithAnswers[] {
+  if (difficulty === null) return [...questions];
+  const matching = questions.filter((q) => q.difficulty === difficulty);
+  return matching.length > 0 ? matching : [...questions];
+}

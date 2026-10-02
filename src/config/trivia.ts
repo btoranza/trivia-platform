@@ -31,6 +31,8 @@ export type TriviaConfig = {
     submitPlaceholder: string;
     back: string;
     home: string;
+    chooseDifficulty: string;
+    randomDifficulty: string;
   };
   /** Placeholders: {score}, {total}, {title}, {tier}, {url}. */
   shareText: string;
@@ -63,6 +65,8 @@ export const triviaConfig = {
     submitPlaceholder: "The submission form is coming soon.",
     back: "← Back home",
     home: "← Home",
+    chooseDifficulty: "Difficulty",
+    randomDifficulty: "Random",
   },
   shareText: "I got {score}/{total} on {title} — I'm a {tier}. {url}",
   tiers: [

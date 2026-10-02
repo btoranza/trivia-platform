@@ -1,11 +1,18 @@
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
-import { Chip } from "@/components/Chip";
+import { DifficultyPicker } from "@/components/DifficultyPicker";
 import { Sticker } from "@/components/Sticker";
 import { triviaConfig as config } from "@/config/trivia";
+import { parseDifficulty } from "@/lib/quiz";
 
-export default function Home() {
-  const lastDifficulty = config.difficulties.length - 1;
+export default async function Home({ searchParams }: PageProps<"/">) {
+  const difficulty = parseDifficulty(
+    (await searchParams).difficulty,
+    config.difficulties,
+  );
+  const quizHref = difficulty
+    ? `/quiz?difficulty=${encodeURIComponent(difficulty)}`
+    : "/quiz";
   return (
     <main className="flex flex-1 flex-col gap-6 md:grid md:flex-none md:grid-cols-2 md:content-center md:gap-x-14 md:gap-y-6 md:my-auto">
       <div className="flex flex-col gap-6 md:col-start-1 md:row-span-3 md:justify-center">
@@ -23,21 +30,17 @@ export default function Home() {
       <div className="md:col-start-2">
         <Card>
           <p className="text-xl font-bold">{config.description}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {config.difficulties.map((d, i) => (
-              <Chip
-                key={d}
-                variant={i === lastDifficulty ? "inverted" : "white"}
-              >
-                {d}
-              </Chip>
-            ))}
-          </div>
+          <DifficultyPicker
+            label={config.labels.chooseDifficulty}
+            options={config.difficulties}
+            randomLabel={config.labels.randomDifficulty}
+            selected={difficulty}
+          />
         </Card>
       </div>
       <div className="flex-1 md:hidden" />
       <div className="flex flex-col gap-4 md:col-start-2">
-        <Button href="/quiz">{config.labels.start}</Button>
+        <Button href={quizHref}>{config.labels.start}</Button>
         <Button href="/submit" variant="secondary">
           {config.labels.submit}
         </Button>
