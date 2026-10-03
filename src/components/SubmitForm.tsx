@@ -7,6 +7,7 @@ import { ANSWER_COUNT, LIMITS } from "@/lib/submissions";
 import { AlertIcon } from "./AlertIcon";
 import { Button } from "./Button";
 import { Card } from "./Card";
+import { RichText } from "./RichText";
 
 const form = config.form;
 
@@ -88,6 +89,9 @@ export function SubmitForm() {
           <label htmlFor="text" className={label}>
             {form.question}
           </label>
+          <p className="mt-1 text-xs font-medium">
+            <RichText text={form.codeHint} />
+          </p>
           <textarea
             id="text"
             name="text"

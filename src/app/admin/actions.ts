@@ -10,7 +10,13 @@ import {
   createSessionToken,
   isAdmin,
 } from "@/lib/admin-auth";
+import { triviaConfig as config } from "@/config/trivia";
 import { db } from "@/lib/db";
+import {
+  ANSWER_COUNT,
+  validateSubmission,
+  type FieldErrors,
+} from "@/lib/submissions";
 
 export type LoginState = { error?: string };
 
@@ -42,59 +48,92 @@ export async function logout() {
   redirect("/admin");
 }
 
-type StoredAnswer = { text: string; isCorrect: boolean };
+export type ReviewState = {
+  errors: FieldErrors;
+  formError?: string;
+  saved?: boolean;
+};
 
-function parseAnswers(value: unknown): StoredAnswer[] {
-  if (
-    !Array.isArray(value) ||
-    !value.every(
-      (a) =>
-        a &&
-        typeof a === "object" &&
-        typeof (a as StoredAnswer).text === "string" &&
-        typeof (a as StoredAnswer).isCorrect === "boolean",
-    )
-  ) {
-    throw new Error("Submission answers have an unexpected shape");
-  }
-  return value as StoredAnswer[];
-}
+const str = (formData: FormData, key: string) => {
+  const v = formData.get(key);
+  return typeof v === "string" ? v : "";
+};
 
-export async function approveSubmission(id: string) {
+/**
+ * One action for the review form. The submit button's `intent` decides:
+ * save edits, approve (saving the edits first), or reject.
+ */
+export async function reviewSubmission(
+  id: string,
+  _prev: ReviewState,
+  formData: FormData,
+): Promise<ReviewState> {
   if (!(await isAdmin())) redirect("/admin");
 
-  await db.$transaction(async (tx) => {
-    // Claim it first so a double click can't create the question twice.
-    const claimed = await tx.questionSubmission.updateMany({
+  const intent = str(formData, "intent");
+
+  if (intent === "reject") {
+    await db.questionSubmission.updateMany({
       where: { id, status: "pending" },
-      data: { status: "approved" },
+      data: { status: "rejected" },
     });
-    if (claimed.count === 0) return;
+    revalidatePath("/admin");
+    return { errors: {} };
+  }
 
-    const submission = await tx.questionSubmission.findUniqueOrThrow({
-      where: { id },
+  const result = validateSubmission(
+    {
+      text: str(formData, "text"),
+      answers: Array.from({ length: ANSWER_COUNT }, (_, i) =>
+        str(formData, `answer-${i}`),
+      ),
+      difficulty: str(formData, "difficulty"),
+      explanation: str(formData, "explanation"),
+      // Credit is not edited here; it is kept as submitted.
+      creditName: "",
+      anonymous: true,
+    },
+    config.difficulties,
+    config.form.errors,
+  );
+  if (!result.ok) return { errors: result.errors };
+  const { text, difficulty, answers, explanation } = result.data;
+  const edits = { text, difficulty, answers, explanation };
+
+  if (intent === "save") {
+    await db.questionSubmission.updateMany({
+      where: { id, status: "pending" },
+      data: edits,
     });
-    await tx.question.create({
-      data: {
-        quizId: submission.quizId,
-        text: submission.text,
-        difficulty: submission.difficulty,
-        explanation: submission.explanation,
-        creditName: submission.creditName,
-        approved: true,
-        answers: { create: parseAnswers(submission.answers) },
-      },
+    revalidatePath("/admin");
+    return { errors: {}, saved: true };
+  }
+
+  if (intent === "approve") {
+    await db.$transaction(async (tx) => {
+      // Claim it first so a double click can't create the question twice.
+      const claimed = await tx.questionSubmission.updateMany({
+        where: { id, status: "pending" },
+        data: { ...edits, status: "approved" },
+      });
+      if (claimed.count === 0) return;
+
+      const submission = await tx.questionSubmission.findUniqueOrThrow({
+        where: { id },
+      });
+      await tx.question.create({
+        data: {
+          quizId: submission.quizId,
+          ...edits,
+          creditName: submission.creditName,
+          approved: true,
+          answers: { create: answers },
+        },
+      });
     });
-  });
+    revalidatePath("/admin");
+    return { errors: {} };
+  }
 
-  revalidatePath("/admin");
-}
-
-export async function rejectSubmission(id: string) {
-  if (!(await isAdmin())) redirect("/admin");
-  await db.questionSubmission.updateMany({
-    where: { id, status: "pending" },
-    data: { status: "rejected" },
-  });
-  revalidatePath("/admin");
+  return { errors: {}, formError: config.form.errors.generic };
 }

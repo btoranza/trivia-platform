@@ -57,6 +57,7 @@ export type TriviaConfig = {
     difficulty: string;
     explanation: string;
     explanationHint: string;
+    codeHint: string;
     name: string;
     anonymous: string;
     submit: string;
@@ -124,6 +125,7 @@ export const triviaConfig = {
     difficulty: "Difficulty",
     explanation: "Explanation",
     explanationHint: "Shown after someone answers. Why is it the right answer?",
+    codeHint: "Wrap code in `backticks`, like `typeof null`.",
     name: "Credit name (optional)",
     anonymous: "Stay anonymous",
     submit: "SEND QUESTION",
