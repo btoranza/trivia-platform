@@ -16,6 +16,7 @@
 
   --font-display: var(--font-archivo-black), sans-serif;
   --font-sans: var(--font-space-grotesk), sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --radius-pill: 999px;
 

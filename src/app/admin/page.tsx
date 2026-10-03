@@ -4,6 +4,7 @@ import { AdminLoginForm } from "@/components/AdminLoginForm";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { Chip } from "@/components/Chip";
+import { RichText } from "@/components/RichText";
 import { HomeLink } from "@/components/HomeLink";
 import { triviaConfig as config } from "@/config/trivia";
 import { getAdminPassword, isAdmin } from "@/lib/admin-auth";
@@ -75,7 +76,13 @@ export default async function AdminPage() {
                 {s.createdAt.toLocaleString("en-US")}
               </span>
             </div>
-            <h2 className="mt-3 text-xl font-bold">{s.text}</h2>
+            <div
+              role="heading"
+              aria-level={2}
+              className="mt-3 text-xl font-bold"
+            >
+              <RichText text={s.text} />
+            </div>
             <ul className="mt-3 flex flex-col gap-2">
               {answers.map((a, i) => (
                 <li
@@ -84,14 +91,18 @@ export default async function AdminPage() {
                     a.isCorrect ? "bg-correct" : "bg-surface"
                   }`}
                 >
-                  {a.text}
+                  <span>
+                    <RichText text={a.text} />
+                  </span>
                   {a.isCorrect && (
                     <Chip variant="correct">{config.labels.correct}</Chip>
                   )}
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-sm font-medium">{s.explanation}</p>
+            <p className="mt-3 text-sm font-medium">
+              <RichText text={s.explanation} />
+            </p>
             <div className="mt-4 grid grid-cols-2 gap-4">
               <form action={rejectSubmission.bind(null, s.id)}>
                 <Button type="submit" variant="secondary">

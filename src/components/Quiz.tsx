@@ -11,6 +11,7 @@ import { Chip } from "./Chip";
 import { HomeLink } from "./HomeLink";
 import { ProgressBar } from "./ProgressBar";
 import { Results } from "./Results";
+import { RichText } from "./RichText";
 
 type Props = {
   /** Full question pool, used to reshuffle on "Play again". */
@@ -91,9 +92,13 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
         label={`${config.labels.questionPrefix} ${index + 1}/${total}`}
       />
       <Card>
-        <h1 className="font-display text-[30px] leading-[1.05] md:text-[38px] tracking-tight">
-          {question.text}
-        </h1>
+        <div
+          role="heading"
+          aria-level={1}
+          className="font-display text-[30px] leading-[1.05] md:text-[38px] tracking-tight"
+        >
+          <RichText text={question.text} />
+        </div>
       </Card>
       <div
         className="grid grid-cols-1 gap-[14px] md:grid-cols-2"
@@ -122,7 +127,9 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
                   ? config.labels.explanationRight
                   : config.labels.explanationWrong}
               </p>
-              <p className="mt-1 text-sm font-medium">{question.explanation}</p>
+              <p className="mt-1 text-sm font-medium">
+                <RichText text={question.explanation} />
+              </p>
               {question.creditName && (
                 <p className="mt-2 text-xs font-bold">
                   {config.labels.submittedBy} {question.creditName}

@@ -1,4 +1,5 @@
 import { Chip } from "./Chip";
+import { RichText } from "./RichText";
 
 export type AnswerState = "default" | "correct" | "wrong" | "idle";
 
@@ -41,7 +42,9 @@ export function AnswerOption({
       }}
       className={`press border-brutal flex min-h-16 w-full items-center justify-between gap-3 px-4 py-3 text-left text-lg font-bold ${states[state]} ${locked ? "cursor-default" : ""}`}
     >
-      <span>{text}</span>
+      <span>
+        <RichText text={text} />
+      </span>
       {state === "correct" && <Chip variant="correct">{correctLabel}</Chip>}
       {state === "wrong" && <Chip variant="accent">{wrongLabel}</Chip>}
     </button>
