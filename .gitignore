@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# neon cli local context
+.neon
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -43,4 +46,6 @@ next-env.d.ts
 # prisma generated client
 /src/generated/
 
-/src/generated/prisma
+# agent skills installed by the Neon CLI
+/.agents/
+/skills-lock.json

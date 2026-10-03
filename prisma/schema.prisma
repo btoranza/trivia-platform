@@ -11,10 +11,9 @@ datasource db {
 }
 
 model Quiz {
-  id    String @id @default(cuid())
-  slug  String @unique
-  title String
-
+  id          String               @id @default(cuid())
+  slug        String               @unique
+  title       String
   questions   Question[]
   submissions QuestionSubmission[]
 }
@@ -25,7 +24,8 @@ model Question {
   text        String
   difficulty  String
   approved    Boolean @default(false)
-  explanation String?
+  explanation String
+  creditName  String?
 
   quiz    Quiz     @relation(fields: [quizId], references: [id])
   answers Answer[]
@@ -57,7 +57,9 @@ model QuestionSubmission {
   difficulty  String
   /// Array of { text: string, isCorrect: boolean }, same shape as Answer.
   answers     Json
-  explanation String?
+  explanation String
+  /// Name credited for submitting the question; null means anonymous.
+  creditName  String?
   status      SubmissionStatus @default(pending)
   createdAt   DateTime         @default(now())
 
