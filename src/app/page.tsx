@@ -23,7 +23,10 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     difficulty,
     config.difficulties,
   );
-  const count = Math.min(pool.length, config.questionsPerGame);
+  const count =
+    config.questionsPerGame === null
+      ? pool.length
+      : Math.min(pool.length, config.questionsPerGame);
   const difficultyInfo = formatTemplate(config.labels.difficultyInfo, {
     count,
     levels: includedDifficulties(difficulty, config.difficulties).join(" + "),

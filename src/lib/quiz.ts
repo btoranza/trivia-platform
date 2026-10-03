@@ -11,14 +11,14 @@ export function shuffle<T>(items: readonly T[], random = Math.random): T[] {
   return out;
 }
 
-/** Pick `count` shuffled questions, each with shuffled answers. */
+/** Pick `count` shuffled questions (all of them if null), each with shuffled answers. */
 export function buildGame(
   questions: readonly QuestionWithAnswers[],
-  count: number,
+  count: number | null,
   random = Math.random,
 ): QuestionWithAnswers[] {
   return shuffle(questions, random)
-    .slice(0, count)
+    .slice(0, count ?? undefined)
     .map((q) => ({ ...q, answers: shuffle(q.answers, random) }));
 }
 

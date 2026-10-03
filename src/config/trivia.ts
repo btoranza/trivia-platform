@@ -17,7 +17,8 @@ export type TriviaConfig = {
   slug: string;
   title: string;
   description: string;
-  questionsPerGame: number;
+  /** Questions per game, or null to play every available question. */
+  questionsPerGame: number | null;
   /** Ordered from easiest to hardest; each level includes the easier ones. */
   difficulties: readonly string[];
   /** Preselected on the Home screen; must be one of `difficulties`. */
@@ -45,6 +46,7 @@ export type TriviaConfig = {
     submittedBy: string;
     explanationWrong: string;
     chooseDifficulty: string;
+    noQuestions: string;
   };
   form: {
     title: string;
@@ -76,18 +78,18 @@ export type TriviaConfig = {
 };
 
 export const triviaConfig = {
-  slug: "danielle-trivia",
-  title: "Danielle Trivia",
+  slug: "frontend-trivia",
+  title: "Frontend Trivia",
   description:
-    "How well do you know the community? Ten questions. No pressure. (Some pressure.)",
-  questionsPerGame: 10,
+    "JavaScript, TypeScript, CSS and HTML. No Googling. (We can tell.)",
+  questionsPerGame: null,
   difficulties: ["Easy", "Medium", "Hard"],
   defaultDifficulty: "Medium",
   labels: {
-    sticker: "A STUPID IDEA",
+    sticker: "NO GOOGLING",
     start: "START QUIZ",
     submit: "Submit a question",
-    credit: "made by Walnuts",
+    credit: "made by Berenice",
     next: "NEXT",
     seeResults: "SEE RESULTS",
     correct: "CORRECT",
@@ -106,11 +108,11 @@ export const triviaConfig = {
     submittedBy: "Submitted by",
     explanationWrong: "Did you know?",
     chooseDifficulty: "Difficulty",
+    noQuestions: "No questions yet. Check back soon!",
   },
   credits: [
     { role: "Developer", names: ["Berenice"] },
     { role: "Questions submitted by", names: [], fromQuestions: true },
-    { role: "Special thanks", names: ["[Placeholder name]"] },
   ],
   form: {
     title: "Submit a question",
@@ -142,33 +144,33 @@ export const triviaConfig = {
     {
       min: 0,
       max: 20,
-      title: "Casual Observer",
-      message: "You wandered in, looked around, and left with snacks. Respect.",
+      title: "Console.log Debugger",
+      message: "You print, you pray, you ship. It works on your machine.",
     },
     {
       min: 21,
       max: 50,
-      title: "Walnut",
-      message: "Hard shell, some substance. You belong here.",
+      title: "Stack Overflow Regular",
+      message: "Not every answer is in your head, but you know where to look.",
     },
     {
       min: 51,
       max: 80,
-      title: "Dedicated Walnut",
-      message: "You show up, you pay attention, you have opinions.",
+      title: "Solid Frontend Dev",
+      message: "You know your div from your span. Pull requests welcome.",
     },
     {
       min: 81,
       max: 99,
-      title: "Veteran Walnut",
-      message: "Almost flawless. The community salutes you.",
+      title: "Senior Engineer",
+      message:
+        "Almost flawless. You have strong opinions about tabs vs spaces.",
     },
     {
       min: 100,
       max: 100,
-      title: "You need to touch grass",
-      message:
-        "Perfect score. Please go outside. We are worried and impressed.",
+      title: "Compiler",
+      message: "Zero errors, zero warnings. Are you even human?",
     },
   ],
 } satisfies TriviaConfig;

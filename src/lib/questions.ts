@@ -1,11 +1,7 @@
 import { db } from "@/lib/db";
-import { mockQuestions } from "@/data/mock-questions";
 import type { QuestionWithAnswers } from "@/types/quiz";
 
-/**
- * Approved questions for a quiz: real ones from the database plus the mock
- * examples (visual placeholders only, never written to the database).
- */
+/** Approved questions for a quiz, read from the database. */
 export async function getQuestions(
   quizSlug: string,
 ): Promise<QuestionWithAnswers[]> {
@@ -14,5 +10,5 @@ export async function getQuestions(
     include: { answers: true },
   });
 
-  return [...questions, ...mockQuestions.filter((q) => q.approved)];
+  return questions;
 }

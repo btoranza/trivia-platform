@@ -1,0 +1,458 @@
+[
+  {
+    "text": "What does `typeof null` return?",
+    "difficulty": "Easy",
+    "answers": [
+      "`\"object\"`",
+      "`\"null\"`",
+      "`\"undefined\"`",
+      "`\"number\"`"
+    ],
+    "explanation": "A bug from the very first version of JavaScript: values carried a type tag, and `null` (a null pointer) ended up with the same tag as objects. Fixing it would break existing websites, so it stays forever.",
+    "id": "fe-01"
+  },
+  {
+    "text": "What does `0.1 + 0.2 === 0.3` evaluate to?",
+    "difficulty": "Easy",
+    "answers": [
+      "`false`",
+      "`true`",
+      "`undefined`",
+      "It throws an error"
+    ],
+    "explanation": "JavaScript numbers are IEEE 754 binary floating point. `0.1` and `0.2` can't be represented exactly, so their sum is `0.30000000000000004`. Compare with a tolerance (`Number.EPSILON`) or work in integers (cents instead of euros).",
+    "id": "fe-02"
+  },
+  {
+    "text": "What is the result of `[] + []`?",
+    "difficulty": "Easy",
+    "answers": [
+      "`\"\"` (an empty string)",
+      "`[]` (an empty array)",
+      "`0`",
+      "`NaN`"
+    ],
+    "explanation": "The `+` operator converts both operands to primitives. An empty array becomes an empty string through `toString()`, so you get `\"\" + \"\"`, which is `\"\"`.",
+    "id": "fe-03"
+  },
+  {
+    "text": "What does `[10, 1, 3].sort()` return?",
+    "difficulty": "Medium",
+    "answers": [
+      "`[1, 10, 3]`",
+      "`[1, 3, 10]`",
+      "`[10, 3, 1]`",
+      "`[3, 10, 1]`"
+    ],
+    "explanation": "Without a compare function, `sort()` converts elements to strings and compares them character by character, so `\"10\"` comes before `\"3\"`. For numbers, use `sort((a, b) => a - b)`.",
+    "id": "fe-04"
+  },
+  {
+    "text": "What does `NaN === NaN` return?",
+    "difficulty": "Easy",
+    "answers": [
+      "`false`",
+      "`true`",
+      "`NaN`",
+      "`undefined`"
+    ],
+    "explanation": "`NaN` is the only value in JavaScript that isn't equal to itself. To check for it, use `Number.isNaN(value)` or `Object.is(value, NaN)`.",
+    "id": "fe-05"
+  },
+  {
+    "text": "What gets logged?\n\n```js\nconsole.log(x);\nvar x = 5;\n```",
+    "difficulty": "Medium",
+    "answers": [
+      "`undefined`",
+      "`5`",
+      "`ReferenceError`",
+      "`null`"
+    ],
+    "explanation": "`var` declarations are hoisted to the top of their scope and initialized as `undefined`; only the assignment stays in place. With `let` or `const` you'd get a `ReferenceError`, because they live in the temporal dead zone until declared.",
+    "id": "fe-06"
+  },
+  {
+    "text": "In which order are the letters logged?\n\n```js\nconsole.log(\"A\");\nsetTimeout(() => console.log(\"B\"), 0);\nPromise.resolve().then(() => console.log(\"C\"));\nconsole.log(\"D\");\n```",
+    "difficulty": "Hard",
+    "answers": [
+      "`A, D, C, B`",
+      "`A, B, C, D`",
+      "`A, D, B, C`",
+      "`A, C, D, B`"
+    ],
+    "explanation": "Synchronous code runs first (`A`, `D`). Then the microtask queue (promise callbacks) is emptied before the next macrotask (`setTimeout`), so `C` comes before `B`, even with a 0 ms delay.",
+    "id": "fe-07"
+  },
+  {
+    "text": "What is the result of `\"5\" - 2`?",
+    "difficulty": "Easy",
+    "answers": [
+      "`3`",
+      "`\"52\"`",
+      "`\"3\"`",
+      "`NaN`"
+    ],
+    "explanation": "The `-` operator only works with numbers, so `\"5\"` is converted to `5`. The `+` operator is different: if either side is a string it concatenates, so `\"5\" + 2` is `\"52\"`.",
+    "id": "fe-08"
+  },
+  {
+    "text": "What does `typeof NaN` return?",
+    "difficulty": "Medium",
+    "answers": [
+      "`\"number\"`",
+      "`\"NaN\"`",
+      "`\"undefined\"`",
+      "`\"object\"`"
+    ],
+    "explanation": "`NaN` (\"Not a Number\") is, ironically, a value of type number. It's what numeric operations return when the result isn't a meaningful number, like `0 / 0`.",
+    "id": "fe-09"
+  },
+  {
+    "text": "What does `[] == ![]` return?",
+    "difficulty": "Hard",
+    "answers": [
+      "`true`",
+      "`false`",
+      "`undefined`",
+      "It throws a `TypeError`"
+    ],
+    "explanation": "Arrays are truthy, so `![]` is `false`. Then `[] == false` triggers coercion: `false` becomes `0`, `[]` becomes `\"\"` and then `0`. So it ends up as `0 == 0`. One more reason to use `===`.",
+    "id": "fe-10"
+  },
+  {
+    "text": "Roughly how long did it take Brendan Eich to write the first version of JavaScript in 1995?",
+    "difficulty": "Easy",
+    "answers": [
+      "About 10 days",
+      "About 6 months",
+      "About 2 years",
+      "About 1 month"
+    ],
+    "explanation": "Brendan Eich wrote the first prototype at Netscape in about 10 days in May 1995. It was originally called Mocha, then LiveScript, before being renamed JavaScript.",
+    "id": "fe-11"
+  },
+  {
+    "text": "What does `Math.max()` return when called with no arguments?",
+    "difficulty": "Hard",
+    "answers": [
+      "`-Infinity`",
+      "`0`",
+      "`Infinity`",
+      "`undefined`"
+    ],
+    "explanation": "`Math.max` starts from `-Infinity` and keeps the larger value as it goes through the arguments. With no arguments, that starting value is returned. `Math.min()` returns `Infinity` for the same reason.",
+    "id": "fe-12"
+  },
+  {
+    "text": "Which type turns off type checking for a value?",
+    "difficulty": "Easy",
+    "answers": [
+      "`any`",
+      "`unknown`",
+      "`never`",
+      "`object`"
+    ],
+    "explanation": "`any` opts the value out of type checking entirely: anything goes, and errors show up at runtime instead. If you don't know the type yet, `unknown` is the safe alternative.",
+    "id": "fe-13"
+  },
+  {
+    "text": "You receive a value of type `unknown`. What do you need to do before calling a method on it?",
+    "difficulty": "Medium",
+    "answers": [
+      "Narrow its type first (`typeof`, `instanceof`, a type guard…)",
+      "Nothing, `unknown` works like `any`",
+      "Declare it with `let` instead of `const`",
+      "Wrap the call in a `try/catch`"
+    ],
+    "explanation": "`unknown` accepts any value, but TypeScript won't let you use it until you prove what it is. That's what makes it the type-safe counterpart of `any`.",
+    "id": "fe-14"
+  },
+  {
+    "text": "What does the `never` type represent?",
+    "difficulty": "Medium",
+    "answers": [
+      "Values that can never occur",
+      "`null` or `undefined`",
+      "Any value at all",
+      "An empty object"
+    ],
+    "explanation": "`never` is the return type of functions that always throw or never finish, and the type left over after all cases are handled. It's the basis of exhaustiveness checks in `switch` statements.",
+    "id": "fe-15"
+  },
+  {
+    "text": "What does the `satisfies` operator do?",
+    "difficulty": "Medium",
+    "answers": [
+      "Checks that a value matches a type without changing its inferred type",
+      "Casts the value to the type, like `as`",
+      "Validates the value at runtime",
+      "Makes all the properties `readonly`"
+    ],
+    "explanation": "Introduced in TypeScript 4.9. Unlike a type annotation, it keeps the narrower inferred type (literal values, exact keys). Unlike `as`, it reports an error if the value doesn't match.",
+    "id": "fe-16"
+  },
+  {
+    "text": "What does the `Partial<T>` utility type do?",
+    "difficulty": "Easy",
+    "answers": [
+      "Makes every property of `T` optional",
+      "Makes every property of `T` `readonly`",
+      "Makes every property of `T` required",
+      "Removes the methods from `T`"
+    ],
+    "explanation": "`Partial<T>` maps over `T` and adds `?` to every property. Typical use: the argument of an update function where you only pass the fields that change. Its opposite is `Required<T>`.",
+    "id": "fe-17"
+  },
+  {
+    "text": "What is `K`?\n\n```ts\ntype K = keyof { a: number; b: string };\n```",
+    "difficulty": "Hard",
+    "answers": [
+      "`\"a\" | \"b\"`",
+      "`number | string`",
+      "`{ a: number; b: string }`",
+      "`string`"
+    ],
+    "explanation": "`keyof` produces a union of the type's property names as string literal types. Combined with indexed access (`T[K]`) it's the base of most generic utility types.",
+    "id": "fe-18"
+  },
+  {
+    "text": "Which company created TypeScript?",
+    "difficulty": "Easy",
+    "answers": [
+      "Microsoft",
+      "Google",
+      "Meta",
+      "Mozilla"
+    ],
+    "explanation": "Microsoft released TypeScript in 2012. Its lead designer is Anders Hejlsberg, who also designed C# and Turbo Pascal.",
+    "id": "fe-19"
+  },
+  {
+    "text": "`User` is an interface. What happens with this code?\n\n```ts\nif (value instanceof User) {\n  // ...\n}\n```",
+    "difficulty": "Medium",
+    "answers": [
+      "Compile error: interfaces don't exist at runtime",
+      "It works like with a class",
+      "It always returns `false`",
+      "It checks that `value` has `User`'s properties"
+    ],
+    "explanation": "TypeScript types are erased when compiling to JavaScript, so there's nothing for `instanceof` to check against. To check the shape at runtime, write a type guard (`value is User`) or use a validation library.",
+    "id": "fe-20"
+  },
+  {
+    "text": "What does HTML stand for?",
+    "difficulty": "Easy",
+    "answers": [
+      "HyperText Markup Language",
+      "HighText Machine Language",
+      "HyperTool Markup Language",
+      "Hyperlink Text Management Language"
+    ],
+    "explanation": "Created by Tim Berners-Lee at CERN in the early 1990s. \"HyperText\" refers to text with links to other text, the core idea of the web.",
+    "id": "fe-21"
+  },
+  {
+    "text": "Which attribute provides alternative text for an image?",
+    "difficulty": "Easy",
+    "answers": [
+      "`alt`",
+      "`title`",
+      "`src`",
+      "`aria-image`"
+    ],
+    "explanation": "Screen readers read the `alt` text, and browsers show it if the image fails to load. Purely decorative images should have an empty `alt=\"\"` so screen readers skip them.",
+    "id": "fe-22"
+  },
+  {
+    "text": "Which element should wrap the dominant content of a page, and appear only once?",
+    "difficulty": "Medium",
+    "answers": [
+      "`<main>`",
+      "`<section>`",
+      "`<article>`",
+      "`<body>`"
+    ],
+    "explanation": "There should be only one visible `<main>` per page. Assistive technologies use it to jump straight to the content, skipping headers and navigation.",
+    "id": "fe-23"
+  },
+  {
+    "text": "Which of these is NOT a void (self-closing) element?",
+    "difficulty": "Medium",
+    "answers": [
+      "`<p>`",
+      "`<br>`",
+      "`<img>`",
+      "`<input>`"
+    ],
+    "explanation": "Void elements can't have content, so they have no closing tag. `<p>` holds text, so it needs one (even if browsers forgive you when it's missing).",
+    "id": "fe-24"
+  },
+  {
+    "text": "What does `<!DOCTYPE html>` actually do?",
+    "difficulty": "Medium",
+    "answers": [
+      "Tells the browser to render in standards mode",
+      "Enables JavaScript on the page",
+      "Declares the page's character encoding",
+      "Validates the HTML before rendering"
+    ],
+    "explanation": "Without a doctype, browsers fall back to \"quirks mode\", which emulates old, non-standard behavior (the box model being the classic example). The encoding goes in `<meta charset>`.",
+    "id": "fe-25"
+  },
+  {
+    "text": "A `<button>` inside a `<form>` has no `type` attribute. What happens when you click it?",
+    "difficulty": "Hard",
+    "answers": [
+      "It submits the form",
+      "Nothing, unless it has a click handler",
+      "It resets the form",
+      "It only focuses the button"
+    ],
+    "explanation": "The default `type` of a button is `submit`. That's why a button meant for something else inside a form needs an explicit `type=\"button\"`, or it will submit (and reload the page).",
+    "id": "fe-26"
+  },
+  {
+    "text": "What should a `<label>`'s `for` attribute match?",
+    "difficulty": "Medium",
+    "answers": [
+      "The `id` of the form control",
+      "The `name` of the form control",
+      "The `class` of the form control",
+      "The `placeholder` of the form control"
+    ],
+    "explanation": "Linking label and control means screen readers announce the label, and clicking the label focuses the input (or toggles the checkbox). Wrapping the input inside the label also works.",
+    "id": "fe-27"
+  },
+  {
+    "text": "Which `<script>` attribute downloads in parallel and runs after the HTML is parsed, keeping the scripts' order?",
+    "difficulty": "Hard",
+    "answers": [
+      "`defer`",
+      "`async`",
+      "`lazy`",
+      "`preload`"
+    ],
+    "explanation": "`async` also downloads in parallel, but runs each script as soon as it arrives, in any order. `defer` waits until parsing is done and runs scripts in document order, before `DOMContentLoaded`.",
+    "id": "fe-28"
+  },
+  {
+    "text": "What does CSS stand for?",
+    "difficulty": "Easy",
+    "answers": [
+      "Cascading Style Sheets",
+      "Creative Style Sheets",
+      "Computer Style Sheets",
+      "Colorful Style Syntax"
+    ],
+    "explanation": "\"Cascading\" refers to how the browser resolves conflicting rules: by origin, importance, specificity and order of appearance.",
+    "id": "fe-29"
+  },
+  {
+    "text": "What is the default value of `box-sizing`?",
+    "difficulty": "Medium",
+    "answers": [
+      "`content-box`",
+      "`border-box`",
+      "`padding-box`",
+      "`margin-box`"
+    ],
+    "explanation": "With `content-box`, `width` only applies to the content: padding and border are added on top. That's why many CSS resets switch everything to `border-box`. Tailwind's preflight does it too.",
+    "id": "fe-30"
+  },
+  {
+    "text": "Which selector has the highest specificity?",
+    "difficulty": "Medium",
+    "answers": [
+      "`#nav`",
+      "`.menu .item.active`",
+      "`body ul li a`",
+      "`nav > a:hover`"
+    ],
+    "explanation": "Specificity is compared by columns (IDs, classes/attributes/pseudo-classes, elements). One ID `(1,0,0)` beats any number of classes, so it wins over `.menu .item.active` `(0,3,0)`.",
+    "id": "fe-31"
+  },
+  {
+    "text": "Which `position` value removes an element from the normal flow and places it relative to its nearest positioned ancestor?",
+    "difficulty": "Medium",
+    "answers": [
+      "`absolute`",
+      "`relative`",
+      "`sticky`",
+      "`static`"
+    ],
+    "explanation": "A \"positioned\" ancestor is any element whose `position` isn't `static`. If there isn't one, the element is placed relative to the initial containing block. `fixed` is similar, but relative to the viewport.",
+    "id": "fe-32"
+  },
+  {
+    "text": "Two stacked block elements: the first has `margin-bottom: 20px`, the second `margin-top: 30px`. How much space is between them?",
+    "difficulty": "Hard",
+    "answers": [
+      "`30px`",
+      "`50px`",
+      "`20px`",
+      "`25px`"
+    ],
+    "explanation": "Adjacent vertical margins collapse into one, the size of the larger. It doesn't happen inside flex or grid containers, which is one reason `gap` is easier to reason about.",
+    "id": "fe-33"
+  },
+  {
+    "text": "In a flex container with `flex-direction: row`, which declaration centers the items horizontally?",
+    "difficulty": "Easy",
+    "answers": [
+      "`justify-content: center`",
+      "`align-items: center`",
+      "`text-align: center`",
+      "`align-content: center`"
+    ],
+    "explanation": "`justify-content` works on the main axis (horizontal in a row) and `align-items` on the cross axis. Switch to `flex-direction: column` and their roles flip.",
+    "id": "fe-34"
+  },
+  {
+    "text": "Which unit is relative to the font size of the root element?",
+    "difficulty": "Medium",
+    "answers": [
+      "`rem`",
+      "`em`",
+      "`vw`",
+      "`px`"
+    ],
+    "explanation": "`rem` means \"root em\": it's based on the `<html>` font size. `em` is based on the current element's font size, so it compounds when nested.",
+    "id": "fe-35"
+  },
+  {
+    "text": "Which option hides an element but keeps its space in the layout?",
+    "difficulty": "Medium",
+    "answers": [
+      "`visibility: hidden`",
+      "`display: none`",
+      "The `hidden` attribute",
+      "`position: absolute`"
+    ],
+    "explanation": "`visibility: hidden` keeps the box but doesn't paint it. `display: none` (and the `hidden` attribute, which applies it) removes it from the layout. `opacity: 0` also keeps the space, but the element can still be clicked.",
+    "id": "fe-36"
+  },
+  {
+    "text": "What is the specificity of `:where(.card) p`?",
+    "difficulty": "Hard",
+    "answers": [
+      "The same as `p` alone",
+      "The same as `.card p`",
+      "The same as `#card p`",
+      "Zero, so it never applies"
+    ],
+    "explanation": "`:where()` always contributes zero specificity, which makes it great for defaults that are easy to override. `:is()` is the opposite: it takes the specificity of its most specific argument.",
+    "id": "fe-37"
+  },
+  {
+    "text": "You set `z-index: 999` on an element with `position: static` that isn't a flex or grid item. What happens?",
+    "difficulty": "Hard",
+    "answers": [
+      "Nothing, `z-index` has no effect",
+      "It goes on top of everything",
+      "It becomes `position: relative` automatically",
+      "It goes on top only of its siblings"
+    ],
+    "explanation": "`z-index` only applies to positioned elements (and flex or grid items). Even then, it's limited by its stacking context: a child can't escape above an element its parent is already below.",
+    "id": "fe-38"
+  }
+]
