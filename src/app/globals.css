@@ -11,6 +11,8 @@
   --color-accent: #ff6fb5;
   --color-surface: #ffffff;
   --color-correct: #3ddc84;
+  /* Darker shade of the accent pink so error text is readable on the canvas. */
+  --color-error: #a80f52;
 
   --font-display: var(--font-archivo-black), sans-serif;
   --font-sans: var(--font-space-grotesk), sans-serif;

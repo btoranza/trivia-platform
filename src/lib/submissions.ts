@@ -11,9 +11,8 @@ export const ANSWER_COUNT = 4;
 
 export type SubmissionInput = {
   text: string;
+  /** The first answer is the correct one; the rest are wrong. */
   answers: string[];
-  /** Index (0-based) of the correct answer, or -1 if none was picked. */
-  correctIndex: number;
   difficulty: string;
   explanation: string;
   creditName: string;
@@ -30,12 +29,7 @@ export type SubmissionData = {
 
 export type FieldErrors = Partial<
   Record<
-    | "text"
-    | "answers"
-    | "correct"
-    | "difficulty"
-    | "explanation"
-    | "creditName",
+    "text" | "answers" | "difficulty" | "explanation" | "creditName",
     string
   >
 >;
@@ -67,10 +61,6 @@ export function validateSubmission(
     found.answers = errors.duplicateAnswers;
   }
 
-  if (input.correctIndex < 0 || input.correctIndex >= ANSWER_COUNT) {
-    found.correct = errors.noCorrect;
-  }
-
   if (!difficulties.includes(input.difficulty)) {
     found.difficulty = errors.required;
   }
@@ -93,7 +83,7 @@ export function validateSubmission(
       difficulty: input.difficulty,
       answers: answers.map((a, i) => ({
         text: a,
-        isCorrect: i === input.correctIndex,
+        isCorrect: i === 0,
       })),
       explanation,
       creditName: input.anonymous || !name ? null : name,

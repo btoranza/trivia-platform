@@ -11,7 +11,6 @@ import {
 export type FormValues = {
   text: string;
   answers: string[];
-  correct: string;
   difficulty: string;
   explanation: string;
   creditName: string;
@@ -39,7 +38,6 @@ export async function submitQuestion(
     answers: Array.from({ length: ANSWER_COUNT }, (_, i) =>
       str(formData, `answer-${i}`),
     ),
-    correct: str(formData, "correct"),
     difficulty: str(formData, "difficulty"),
     explanation: str(formData, "explanation"),
     creditName: str(formData, "creditName"),
@@ -48,7 +46,6 @@ export async function submitQuestion(
   const empty: FormValues = {
     text: "",
     answers: ["", "", "", ""],
-    correct: "",
     difficulty: config.defaultDifficulty,
     explanation: "",
     creditName: "",
@@ -64,7 +61,6 @@ export async function submitQuestion(
     {
       text: values.text,
       answers: values.answers,
-      correctIndex: values.correct === "" ? -1 : Number(values.correct),
       difficulty: values.difficulty,
       explanation: values.explanation,
       creditName: values.creditName,

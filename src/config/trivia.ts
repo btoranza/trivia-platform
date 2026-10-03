@@ -9,6 +9,8 @@ export type ResultTier = {
 export type CreditGroup = {
   role: string;
   names: readonly string[];
+  /** If true, `names` is ignored and filled from the credit names of approved questions. */
+  fromQuestions?: boolean;
 };
 
 export type TriviaConfig = {
@@ -48,9 +50,8 @@ export type TriviaConfig = {
     title: string;
     intro: string;
     question: string;
-    answers: string;
-    answerPlaceholder: string;
     correctAnswer: string;
+    wrongAnswer: string;
     difficulty: string;
     explanation: string;
     explanationHint: string;
@@ -65,7 +66,6 @@ export type TriviaConfig = {
       required: string;
       tooLong: string;
       duplicateAnswers: string;
-      noCorrect: string;
       generic: string;
     };
   };
@@ -109,14 +109,7 @@ export const triviaConfig = {
   },
   credits: [
     { role: "Developer", names: ["Berenice"] },
-    {
-      role: "Questions submitted by",
-      names: [
-        "[Placeholder name 1]",
-        "[Placeholder name 2]",
-        "[Placeholder name 3]",
-      ],
-    },
+    { role: "Questions submitted by", names: [], fromQuestions: true },
     { role: "Special thanks", names: ["[Placeholder name]"] },
   ],
   form: {
@@ -124,9 +117,8 @@ export const triviaConfig = {
     intro:
       "Got a good one? Send it in. Questions are reviewed by hand before they show up in the quiz.",
     question: "Your question",
-    answers: "Answers",
-    answerPlaceholder: "Answer",
     correctAnswer: "Correct",
+    wrongAnswer: "Wrong",
     difficulty: "Difficulty",
     explanation: "Explanation",
     explanationHint: "Shown after someone answers. Why is it the right answer?",
@@ -142,7 +134,6 @@ export const triviaConfig = {
       required: "This field is required.",
       tooLong: "Too long.",
       duplicateAnswers: "Answers must be different from each other.",
-      noCorrect: "Pick which answer is correct.",
       generic: "Something went wrong. Please try again.",
     },
   },
