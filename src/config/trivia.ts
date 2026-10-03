@@ -35,8 +35,6 @@ export type TriviaConfig = {
     share: string;
     copied: string;
     questionPrefix: string;
-    submitTitle: string;
-    submitPlaceholder: string;
     back: string;
     home: string;
     credits: string;
@@ -45,6 +43,31 @@ export type TriviaConfig = {
     submittedBy: string;
     explanationWrong: string;
     chooseDifficulty: string;
+  };
+  form: {
+    title: string;
+    intro: string;
+    question: string;
+    answers: string;
+    answerPlaceholder: string;
+    correctAnswer: string;
+    difficulty: string;
+    explanation: string;
+    explanationHint: string;
+    name: string;
+    anonymous: string;
+    submit: string;
+    sending: string;
+    successTitle: string;
+    successMessage: string;
+    submitAnother: string;
+    errors: {
+      required: string;
+      tooLong: string;
+      duplicateAnswers: string;
+      noCorrect: string;
+      generic: string;
+    };
   };
   /** Placeholders: {score}, {total}, {title}, {tier}, {url}. */
   shareText: string;
@@ -75,8 +98,6 @@ export const triviaConfig = {
     share: "SHARE",
     copied: "Copied!",
     questionPrefix: "Q",
-    submitTitle: "Submit a question",
-    submitPlaceholder: "The submission form is coming soon.",
     back: "Back home",
     home: "Home",
     credits: "Credits",
@@ -98,6 +119,33 @@ export const triviaConfig = {
     },
     { role: "Special thanks", names: ["[Placeholder name]"] },
   ],
+  form: {
+    title: "Submit a question",
+    intro:
+      "Got a good one? Send it in. Questions are reviewed by hand before they show up in the quiz.",
+    question: "Your question",
+    answers: "Answers",
+    answerPlaceholder: "Answer",
+    correctAnswer: "Correct",
+    difficulty: "Difficulty",
+    explanation: "Explanation",
+    explanationHint: "Shown after someone answers. Why is it the right answer?",
+    name: "Credit name (optional)",
+    anonymous: "Stay anonymous",
+    submit: "SEND QUESTION",
+    sending: "SENDING...",
+    successTitle: "Thanks!",
+    successMessage:
+      "Your question is waiting for review. If it gets approved, it will join the quiz.",
+    submitAnother: "Submit another",
+    errors: {
+      required: "This field is required.",
+      tooLong: "Too long.",
+      duplicateAnswers: "Answers must be different from each other.",
+      noCorrect: "Pick which answer is correct.",
+      generic: "Something went wrong. Please try again.",
+    },
+  },
   shareText: "I got {score}/{total} on {title} — I'm a {tier}. {url}",
   tiers: [
     {
