@@ -21,7 +21,7 @@ Players pick a difficulty, answer a shuffled set of questions, learn something f
 - **Public submission form** with validation and a honeypot field against bots. Submissions are stored as pending.
 - **Admin page** (password protected) to edit a submission with a live preview, then save, approve or reject it.
 - **Credits page** built from the credit names of approved questions. Anonymous questions are left out.
-- **Responsive**: works on phones and desktops.
+- **Responsive**: a compact layout on phones, designed so most screens fit without vertical scrolling (the submission form is the exception), and a roomier two-column layout on desktop.
 
 ## Screenshots
 
