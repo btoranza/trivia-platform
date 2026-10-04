@@ -210,7 +210,7 @@ docs/screenshots/      Images used in this README
 
 ## Deployment
 
-It is a standard Next.js app, so [Vercel](https://vercel.com) or any Node host works. The steps are:
+The [live demo](https://coding-trivia-bt.vercel.app/) runs on [Vercel](https://vercel.com), but it is a standard Next.js app, so any Node host works. The steps are:
 
 1. Set `DATABASE_URL` and `ADMIN_PASSWORD` in the project's environment variables.
 2. Apply the migrations to the production database: `npx prisma migrate deploy`.
