@@ -45,6 +45,7 @@ export function Results({ score, total, tier, onRestart }: Props) {
       <div className="self-start">
         <HomeLink />
       </div>
+      <div className="flex-1 md:hidden" />
       <p className="text-sm font-bold uppercase tracking-wide">
         {config.title} · {config.labels.resultsSuffix}
       </p>
@@ -64,7 +65,6 @@ export function Results({ score, total, tier, onRestart }: Props) {
           </Card>
         </div>
       </div>
-      <div className="flex-1 md:hidden" />
       <div className="grid w-full grid-cols-2 gap-4 md:max-w-md">
         <Button variant="secondary" onClick={onRestart}>
           {config.labels.playAgain}
@@ -75,6 +75,7 @@ export function Results({ score, total, tier, onRestart }: Props) {
           </span>
         </Button>
       </div>
+      <div className="flex-1 md:hidden" />
     </main>
   );
 }
