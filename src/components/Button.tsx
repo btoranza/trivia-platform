@@ -5,11 +5,11 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 type Variant = "primary" | "secondary";
 
 const base =
-  "press border-brutal inline-flex h-16 w-full items-center justify-center gap-2 whitespace-nowrap px-4 text-center";
+  "press border-brutal inline-flex h-12 w-full md:h-16 items-center justify-center gap-2 whitespace-nowrap px-4 text-center";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-accent font-display text-xl uppercase text-ink",
-  secondary: "bg-surface font-sans text-lg font-bold text-ink",
+  primary: "bg-accent font-display text-lg uppercase text-ink md:text-xl",
+  secondary: "bg-surface font-sans text-base font-bold text-ink md:text-lg",
 };
 
 type Props = {

@@ -77,7 +77,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
   }
 
   return (
-    <main className="mx-auto flex w-full flex-1 flex-col gap-5 md:max-w-2xl">
+    <main className="mx-auto flex w-full flex-1 flex-col gap-3 md:max-w-2xl md:gap-5">
       <div>
         <HomeLink />
       </div>
@@ -95,13 +95,13 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
         <div
           role="heading"
           aria-level={1}
-          className="font-display text-[30px] leading-[1.05] md:text-[38px] tracking-tight"
+          className="font-display text-[24px] leading-[1.1] md:text-[38px] md:leading-[1.05] tracking-tight"
         >
           <RichText text={question.text} />
         </div>
       </Card>
       <div
-        className="grid grid-cols-1 gap-[14px] md:grid-cols-2"
+        className="grid grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-[14px]"
         key={question.id}
       >
         {question.answers.map((a) => (
@@ -118,7 +118,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
         ))}
       </div>
       <div className="flex-1 md:hidden" />
-      <div className="flex min-h-16 items-center gap-4">
+      <div className="flex min-h-12 items-center gap-3 md:min-h-16 md:gap-4">
         {hasExplanation && (
           <div className="min-w-0 flex-1">
             <Card>

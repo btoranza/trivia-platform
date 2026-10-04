@@ -40,7 +40,7 @@ export function AnswerOption({
       onClick={() => {
         if (!locked) onSelect();
       }}
-      className={`press border-brutal flex min-h-16 w-full items-center justify-between gap-3 px-4 py-3 text-left text-lg font-bold ${states[state]} ${locked ? "cursor-default" : ""}`}
+      className={`press border-brutal flex min-h-12 w-full items-center justify-between gap-3 px-4 py-2 text-left text-base font-bold md:min-h-16 md:py-3 md:text-lg ${states[state]} ${locked ? "cursor-default" : ""}`}
     >
       <span>
         <RichText text={text} />

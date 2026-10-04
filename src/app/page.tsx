@@ -33,12 +33,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   });
   const quizHref = `/quiz?difficulty=${encodeURIComponent(difficulty)}`;
   return (
-    <main className="flex flex-1 flex-col gap-6 md:grid md:flex-none md:grid-cols-2 md:content-center md:gap-x-14 md:gap-y-6 md:my-auto">
-      <div className="flex flex-col gap-6 md:col-start-1 md:row-span-3 md:justify-center">
+    <main className="flex flex-1 flex-col justify-center gap-4 md:grid md:justify-normal md:flex-none md:grid-cols-2 md:content-center md:gap-x-14 md:gap-y-6 md:my-auto">
+      <div className="flex flex-col gap-4 md:gap-6 md:col-start-1 md:row-span-3 md:justify-center">
         <div>
           <Sticker>{config.labels.sticker}</Sticker>
         </div>
-        <h1 className="font-display text-[clamp(44px,16vw,68px)] md:text-[72px] uppercase leading-[0.95] tracking-tight">
+        <h1 className="font-display text-[clamp(40px,14vw,60px)] md:text-[72px] uppercase leading-[0.95] tracking-tight">
           {config.title.split(" ").map((word) => (
             <span key={word} className="block">
               {word}
@@ -48,7 +48,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       </div>
       <div className="md:col-start-2">
         <Card>
-          <p className="text-xl font-bold">{config.description}</p>
+          <p className="text-lg font-bold md:text-xl">{config.description}</p>
           <DifficultyPicker
             label={config.labels.chooseDifficulty}
             options={config.difficulties}
@@ -57,8 +57,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           <p className="mt-3 text-sm font-bold">{difficultyInfo}</p>
         </Card>
       </div>
-      <div className="flex-1 md:hidden" />
-      <div className="flex flex-col gap-4 md:col-start-2">
+      <div className="flex flex-col gap-3 md:col-start-2 md:gap-4">
         <Button href={quizHref} arrow="right">
           {config.labels.start}
         </Button>

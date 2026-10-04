@@ -7,7 +7,7 @@ export function ProgressBar({ value, label }: { value: number; label: string }) 
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={pct}
-      className="border-brutal h-[18px] w-full bg-surface"
+      className="border-brutal h-3.5 w-full md:h-[18px] bg-surface"
     >
       <div
         className="h-full border-r-[length:var(--border-w)] border-ink bg-accent"

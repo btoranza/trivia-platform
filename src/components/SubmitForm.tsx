@@ -25,7 +25,7 @@ const initialState: SubmitState = {
 };
 
 const input =
-  "border-brutal w-full px-3 py-3 text-base font-medium text-ink placeholder:text-ink/60";
+  "border-brutal w-full px-3 py-2 md:py-3 text-base font-medium text-ink placeholder:text-ink/60";
 const label = "text-sm font-bold uppercase tracking-wide";
 
 function FieldError({ id, message }: { id: string; message?: string }) {
@@ -73,7 +73,7 @@ export function SubmitForm() {
   return (
     <form
       action={action}
-      className="flex flex-col gap-6 md:grid md:grid-cols-2 md:items-start md:gap-x-10 md:gap-y-6"
+      className="flex flex-col gap-4 md:grid md:grid-cols-2 md:items-start md:gap-x-10 md:gap-y-6"
       noValidate
     >
       {/* Honeypot: hidden from people and assistive tech, bots tend to fill it. */}
@@ -84,7 +84,7 @@ export function SubmitForm() {
         </label>
       </div>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4 md:gap-5">
         <div>
           <label htmlFor="text" className={label}>
             {form.question}
@@ -100,19 +100,19 @@ export function SubmitForm() {
             defaultValue={values.text}
             aria-invalid={Boolean(errors.text)}
             aria-describedby="text-error"
-            className={`${input} mt-2 resize-none bg-surface`}
+            className={`${input} mt-2 resize-none bg-surface max-md:h-20`}
           />
           <FieldError id="text-error" message={errors.text} />
         </div>
 
-        <fieldset className="flex flex-col gap-3">
+        <fieldset className="flex flex-col gap-2.5 md:gap-3">
           {values.answers.map((answer, i) => {
             const text = i === 0 ? form.correctAnswer : form.wrongAnswer;
             return (
-              <div key={i} className="md:flex md:items-center md:gap-3">
+              <div key={i} className="flex items-center gap-3">
                 <label
                   htmlFor={`answer-${i}`}
-                  className={`${label} md:w-20 md:shrink-0`}
+                  className={`${label} w-20 shrink-0`}
                 >
                   {text}
                 </label>
@@ -125,7 +125,7 @@ export function SubmitForm() {
                   defaultValue={answer}
                   aria-invalid={Boolean(errors.answers)}
                   aria-describedby="answers-error"
-                  className={`${input} mt-2 md:mt-0 ${i === 0 ? "bg-correct" : "bg-surface"}`}
+                  className={`${input} ${i === 0 ? "bg-correct" : "bg-surface"}`}
                 />
               </div>
             );
@@ -134,7 +134,7 @@ export function SubmitForm() {
         </fieldset>
       </div>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4 md:gap-5">
         <div>
           <label htmlFor="explanation" className={label}>
             {form.explanation}
@@ -148,7 +148,7 @@ export function SubmitForm() {
             placeholder={form.explanationHint}
             aria-invalid={Boolean(errors.explanation)}
             aria-describedby="explanation-error"
-            className={`${input} mt-2 resize-none bg-surface`}
+            className={`${input} mt-2 resize-none bg-surface max-md:h-20`}
           />
           <FieldError id="explanation-error" message={errors.explanation} />
         </div>

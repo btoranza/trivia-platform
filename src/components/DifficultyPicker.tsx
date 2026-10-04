@@ -10,7 +10,7 @@ type Props = {
 /** Link-based selector: the choice lives in the URL (?difficulty=...). */
 export function DifficultyPicker({ label, options, selected }: Props) {
   return (
-    <div role="group" aria-label={label} className="mt-4 flex flex-wrap gap-2">
+    <div role="group" aria-label={label} className="mt-3 flex flex-wrap gap-2 md:mt-4">
       {options.map((option) => {
         const active = option === selected;
         return (

@@ -41,15 +41,15 @@ export function Results({ score, total, tier, onRestart }: Props) {
   }
 
   return (
-    <main className="mx-auto flex w-full flex-1 flex-col items-center gap-7 text-center md:max-w-3xl">
+    <main className="mx-auto flex w-full flex-1 flex-col items-center gap-4 text-center md:gap-7 md:max-w-3xl">
       <div className="self-start">
         <HomeLink />
       </div>
       <p className="text-sm font-bold uppercase tracking-wide">
         {config.title} · {config.labels.resultsSuffix}
       </p>
-      <div className="flex w-full flex-col items-center gap-7 md:my-auto md:flex-row md:gap-12">
-        <div className="py-2 md:shrink-0 md:px-4">
+      <div className="flex w-full flex-col items-center gap-4 md:my-auto md:flex-row md:gap-12">
+        <div className="py-1 md:shrink-0 md:px-4 md:py-2">
           <ScoreBadge score={score} total={total} />
         </div>
         <div className="w-full text-left">
@@ -57,10 +57,10 @@ export function Results({ score, total, tier, onRestart }: Props) {
             <p className="text-sm font-bold uppercase tracking-wide">
               {config.labels.youAreA}
             </p>
-            <h1 className="mt-1 font-display text-[38px] uppercase leading-none tracking-tight">
+            <h1 className="mt-1 font-display text-[30px] uppercase md:text-[38px] leading-none tracking-tight">
               {tier.title}
             </h1>
-            <p className="mt-3 text-lg font-medium">{tier.message}</p>
+            <p className="mt-2 text-base font-medium md:mt-3 md:text-lg">{tier.message}</p>
           </Card>
         </div>
       </div>

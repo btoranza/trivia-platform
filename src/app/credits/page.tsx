@@ -17,11 +17,11 @@ export default async function CreditsPage() {
     .filter((group) => group.names.length > 0);
 
   return (
-    <main className="mx-auto flex w-full flex-1 flex-col gap-6 md:max-w-2xl">
+    <main className="mx-auto flex w-full flex-1 flex-col gap-4 md:max-w-2xl md:gap-6">
       <div>
         <HomeLink />
       </div>
-      <h1 className="font-display text-5xl uppercase leading-none tracking-tight">
+      <h1 className="font-display text-4xl uppercase md:text-5xl leading-none tracking-tight">
         {config.labels.credits}
       </h1>
       {groups.map((group) => (
