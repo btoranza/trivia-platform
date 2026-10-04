@@ -193,6 +193,14 @@ The server actions are tested with the database and the Next.js helpers (`cookie
 
 Database queries such as the credits list are not covered yet.
 
+GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs the type check, lint and tests on every push to `main` and on pull requests. No secrets are needed, since the tests never connect to a database. To run the same checks locally:
+
+```bash
+npx next typegen && npx tsc --noEmit && npm run lint && npm test
+```
+
+`next typegen` creates the `PageProps` and `LayoutProps` types that the type check relies on. `npm run dev` and `npm run build` also create them.
+
 ## Project structure
 
 ```
