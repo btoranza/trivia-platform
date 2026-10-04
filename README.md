@@ -2,6 +2,8 @@
 
 A quiz about JavaScript, TypeScript, CSS and HTML. No Googling. (We can tell.)
 
+**[Play the live demo →](https://coding-trivia-bt.vercel.app/)**
+
 Players pick a difficulty, answer a shuffled set of questions, learn something from each explanation and finish with a result tier ("Console.log Debugger" up to "Compiler") they can share. Anyone can submit a question; an admin reviews, edits and approves it before it joins the quiz.
 
 <p align="center">
