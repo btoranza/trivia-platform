@@ -184,7 +184,14 @@ The unit tests live next to the code they cover, in `src/lib/`:
 | [rich-text.test.ts](src/lib/rich-text.test.ts) | Inline code and fenced blocks, including unclosed ones |
 | [admin-auth.test.ts](src/lib/admin-auth.test.ts) | Password check, session token creation, expiry and tampering |
 
-Server actions and database queries are not covered yet.
+The server actions are tested with the database and the Next.js helpers (`cookies`, `redirect`, `revalidatePath`) mocked, so no real database is needed:
+
+| File | Covers |
+| --- | --- |
+| [submit/actions.test.ts](src/app/submit/actions.test.ts) | Saving a pending submission, validation errors, the honeypot, database failures |
+| [admin/actions.test.ts](src/app/admin/actions.test.ts) | Login and logout, access without a session, save / approve / reject, and approving only once |
+
+Database queries such as the credits list are not covered yet.
 
 ## Project structure
 
