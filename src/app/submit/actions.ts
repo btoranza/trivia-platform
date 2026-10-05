@@ -1,7 +1,9 @@
 "use server";
 
+import { after } from "next/server";
 import { triviaConfig as config } from "@/config/trivia";
 import { db } from "@/lib/db";
+import { notifyAdmin } from "@/lib/notify";
 import {
   ANSWER_COUNT,
   validateSubmission,
@@ -87,5 +89,6 @@ export async function submitQuestion(
     };
   }
 
+  after(() => notifyAdmin("New question waiting for review:"));
   return { status: "success", errors: {}, values: empty };
 }

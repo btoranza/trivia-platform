@@ -1,7 +1,9 @@
 "use server";
 
+import { after } from "next/server";
 import { triviaConfig as config } from "@/config/trivia";
 import { db } from "@/lib/db";
+import { notifyAdmin } from "@/lib/notify";
 import { validateFeedback, type FeedbackErrors } from "@/lib/feedback";
 
 export type FeedbackValues = {
@@ -59,5 +61,6 @@ export async function submitFeedback(
     };
   }
 
+  after(() => notifyAdmin("New feedback note:"));
   return { status: "success", errors: {}, values: empty };
 }

@@ -5,6 +5,10 @@ const db = vi.hoisted(() => ({
   feedback: { create: vi.fn() },
 }));
 vi.mock("@/lib/db", () => ({ db }));
+const notifyAdmin = vi.hoisted(() => vi.fn());
+vi.mock("@/lib/notify", () => ({ notifyAdmin }));
+// `after` only works inside a real request, so run its callback right away.
+vi.mock("next/server", () => ({ after: (fn: () => void) => fn() }));
 
 import { triviaConfig } from "@/config/trivia";
 import { submitFeedback, type FeedbackState } from "@/app/feedback/actions";
@@ -93,5 +97,33 @@ describe("submitFeedback", () => {
     expect(state.status).toBe("error");
     expect(state.formError).toBe(triviaConfig.form.errors.generic);
     expect(state.values.message).toBe("Great quiz, please add dark mode.");
+  });
+});
+
+describe("notifications", () => {
+  it("notifies the admin after saving", async () => {
+    await submitFeedback(idle, form());
+
+    expect(notifyAdmin).toHaveBeenCalledTimes(1);
+    expect(notifyAdmin.mock.calls[0][0]).toContain("New feedback");
+  });
+
+  it("does not notify when validation fails", async () => {
+    await submitFeedback(idle, form({ message: "  " }));
+
+    expect(notifyAdmin).not.toHaveBeenCalled();
+  });
+
+  it("does not notify when saving fails", async () => {
+    db.feedback.create.mockRejectedValue(new Error("db down"));
+    await submitFeedback(idle, form());
+
+    expect(notifyAdmin).not.toHaveBeenCalled();
+  });
+
+  it("does not notify for the honeypot", async () => {
+    await submitFeedback(idle, form({ website: "http://spam" }));
+
+    expect(notifyAdmin).not.toHaveBeenCalled();
   });
 });
