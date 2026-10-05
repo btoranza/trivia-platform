@@ -126,9 +126,9 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
           />
         ))}
       </div>
-      <div className="flex min-h-12 items-center gap-3 md:min-h-16 md:gap-4">
+      <div className="flex min-h-12 flex-col gap-3 md:min-h-16 md:flex-row md:items-center md:gap-4">
         {hasExplanation && (
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 md:flex-1">
             <Card>
               <p className="text-xs font-bold uppercase tracking-wide">
                 {heading}
@@ -148,7 +148,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
           <div
             className={
               hasExplanation
-                ? "w-32 shrink-0 md:w-48"
+                ? "w-full md:w-48 md:shrink-0"
                 : "w-full md:ml-auto md:w-72"
             }
           >
