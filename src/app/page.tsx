@@ -64,6 +64,9 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         <Button href="/submit" variant="secondary">
           {config.labels.submit}
         </Button>
+        <Button href="/feedback" variant="secondary">
+          {config.labels.feedback}
+        </Button>
       </div>
       <p className="text-center text-sm font-bold md:col-start-2">
         {count} questions · {config.labels.credit} ·{" "}

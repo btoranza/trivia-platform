@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Space_Grotesk } from "next/font/google";
 import { triviaConfig } from "@/config/trivia";
+import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const archivoBlack = Archivo_Black({
@@ -16,8 +17,17 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  // Absolute base for the link-preview image URLs.
+  metadataBase: new URL(siteUrl() ?? "http://localhost:3000"),
   title: triviaConfig.title,
   description: triviaConfig.description,
+  openGraph: {
+    title: triviaConfig.title,
+    description: triviaConfig.description,
+    siteName: triviaConfig.title,
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

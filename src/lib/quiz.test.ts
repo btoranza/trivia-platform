@@ -1,14 +1,16 @@
 import { describe, expect, it } from "vitest";
-import type { ResultTier } from "@/config/trivia";
+import { triviaConfig, type ResultTier } from "@/config/trivia";
 import type { QuestionWithAnswers } from "@/types/quiz";
 import {
   buildGame,
   filterByDifficulty,
   formatTemplate,
+  gameForQuestion,
   getTier,
   includedDifficulties,
   parseDifficulty,
   percentage,
+  pickPhrase,
   shuffle,
 } from "@/lib/quiz";
 
@@ -165,5 +167,66 @@ describe("filterByDifficulty", () => {
     const onlyHard = [question("h", "Hard")];
     expect(filterByDifficulty(onlyHard, "Easy", difficulties)).toHaveLength(1);
     expect(filterByDifficulty(pool, "Nope", difficulties)).toHaveLength(3);
+  });
+});
+
+describe("pickPhrase", () => {
+  it("picks from the options", () => {
+    expect(pickPhrase(["a", "b", "c"], undefined, () => 0.5)).toBe("b");
+  });
+
+  it("never repeats the previous phrase", () => {
+    for (const r of [0, 0.4, 0.99]) {
+      expect(pickPhrase(["a", "b", "c"], "b", () => r)).not.toBe("b");
+    }
+  });
+
+  it("returns the only option even if it was the previous one", () => {
+    expect(pickPhrase(["a"], "a")).toBe("a");
+  });
+
+  it("returns an empty string for an empty list", () => {
+    expect(pickPhrase([])).toBe("");
+  });
+});
+
+describe("gameForQuestion", () => {
+  const pool = ["1", "2", "3"].map((id) => question(id, "Easy"));
+
+  it("returns a one-question game with shuffled answers", () => {
+    const game = gameForQuestion(pool, "2");
+    expect(game).toHaveLength(1);
+    expect(game![0].id).toBe("2");
+    expect(game![0].answers.map((a) => a.id).sort()).toEqual([
+      "2-a",
+      "2-b",
+      "2-c",
+    ]);
+  });
+
+  it("returns null for an unknown id", () => {
+    expect(gameForQuestion(pool, "nope")).toBeNull();
+  });
+});
+
+describe("the configured result tiers", () => {
+  const tiers = triviaConfig.tiers;
+
+  it("start at 0 and end at 100", () => {
+    expect(tiers[0].min).toBe(0);
+    expect(tiers[tiers.length - 1].max).toBe(100);
+  });
+
+  it("follow each other with no gaps or overlaps", () => {
+    for (let i = 1; i < tiers.length; i++) {
+      expect(tiers[i].min).toBe(tiers[i - 1].max + 1);
+    }
+  });
+
+  it("give every percentage from 0 to 100 exactly one tier", () => {
+    for (let pct = 0; pct <= 100; pct++) {
+      const matches = tiers.filter((t) => pct >= t.min && pct <= t.max);
+      expect(matches).toHaveLength(1);
+    }
   });
 });

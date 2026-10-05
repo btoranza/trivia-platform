@@ -27,6 +27,8 @@ async function main() {
       text: q.text,
       difficulty: q.difficulty,
       explanation: q.explanation,
+      // Optional in the JSON: only some questions credit a community member.
+      creditName: (q as { creditName?: string }).creditName ?? null,
       approved: true,
     };
     await prisma.question.upsert({

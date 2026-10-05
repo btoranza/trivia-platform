@@ -16,6 +16,7 @@ model Quiz {
   title       String
   questions   Question[]
   submissions QuestionSubmission[]
+  feedback    Feedback[]
 }
 
 model Question {
@@ -62,6 +63,21 @@ model QuestionSubmission {
   creditName  String?
   status      SubmissionStatus @default(pending)
   createdAt   DateTime         @default(now())
+
+  quiz Quiz @relation(fields: [quizId], references: [id])
+
+  @@index([quizId])
+}
+
+model Feedback {
+  id         String   @id @default(cuid())
+  quizId     String
+  message    String
+  /// Name or username given by the sender; null means anonymous.
+  creditName String?
+  /// Set from /admin once the note has been read.
+  handled    Boolean  @default(false)
+  createdAt  DateTime @default(now())
 
   quiz Quiz @relation(fields: [quizId], references: [id])
 

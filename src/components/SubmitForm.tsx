@@ -90,7 +90,7 @@ export function SubmitForm() {
             {form.question}
           </label>
           <p className="mt-1 text-xs font-medium">
-            <RichText text={form.codeHint} />
+            <RichText text={form.questionHint} />
           </p>
           <textarea
             id="text"

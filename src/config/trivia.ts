@@ -27,6 +27,7 @@ export type TriviaConfig = {
     sticker: string;
     start: string;
     submit: string;
+    feedback: string;
     credit: string;
     next: string;
     seeResults: string;
@@ -37,14 +38,18 @@ export type TriviaConfig = {
     playAgain: string;
     share: string;
     copied: string;
+    saved: string;
+    sharing: string;
     questionPrefix: string;
     back: string;
     home: string;
     credits: string;
-    explanationRight: string;
+    /** Heading shown over the explanation after a correct answer; one is picked at random. */
+    explanationRight: readonly string[];
     difficultyInfo: string;
     submittedBy: string;
-    explanationWrong: string;
+    /** Same, after a wrong answer. */
+    explanationWrong: readonly string[];
     chooseDifficulty: string;
     noQuestions: string;
   };
@@ -57,7 +62,7 @@ export type TriviaConfig = {
     difficulty: string;
     explanation: string;
     explanationHint: string;
-    codeHint: string;
+    questionHint: string;
     name: string;
     anonymous: string;
     submit: string;
@@ -71,6 +76,17 @@ export type TriviaConfig = {
       duplicateAnswers: string;
       generic: string;
     };
+  };
+  feedback: {
+    title: string;
+    intro: string;
+    message: string;
+    name: string;
+    submit: string;
+    sending: string;
+    successTitle: string;
+    successMessage: string;
+    sendAnother: string;
   };
   /** Placeholders: {score}, {total}, {title}, {tier}, {url}. */
   shareText: string;
@@ -90,6 +106,7 @@ export const triviaConfig = {
     sticker: "NO GOOGLING",
     start: "START QUIZ",
     submit: "Submit a question",
+    feedback: "Leave feedback",
     credit: "made by Berenice",
     next: "NEXT",
     seeResults: "SEE RESULTS",
@@ -100,14 +117,16 @@ export const triviaConfig = {
     playAgain: "Play again",
     share: "SHARE",
     copied: "Copied!",
+    saved: "Saved!",
+    sharing: "...",
     questionPrefix: "Q",
     back: "Back home",
     home: "Home",
     credits: "Credits",
-    explanationRight: "That's right!",
+    explanationRight: ["That's right!"],
     difficultyInfo: "{count} questions · {levels}",
     submittedBy: "Submitted by",
-    explanationWrong: "Did you know?",
+    explanationWrong: ["Did you know?"],
     chooseDifficulty: "Difficulty",
     noQuestions: "No questions yet. Check back soon!",
   },
@@ -125,7 +144,7 @@ export const triviaConfig = {
     difficulty: "Difficulty",
     explanation: "Explanation",
     explanationHint: "Shown after someone answers. Why is it the right answer?",
-    codeHint: "Wrap code in `backticks`, like `typeof null`.",
+    questionHint: "Wrap code in `backticks`, like `typeof null`.",
     name: "Credit name (optional)",
     anonymous: "Stay anonymous",
     submit: "SEND QUESTION",
@@ -140,6 +159,18 @@ export const triviaConfig = {
       duplicateAnswers: "Answers must be different from each other.",
       generic: "Something went wrong. Please try again.",
     },
+  },
+  feedback: {
+    title: "Leave feedback",
+    intro:
+      "Spotted a mistake? Got an idea for the site? Tell us. Every note gets read.",
+    message: "Your note",
+    name: "Credit name (optional)",
+    submit: "SEND NOTE",
+    sending: "SENDING...",
+    successTitle: "Thanks!",
+    successMessage: "Your note is in. Thanks for helping improve the trivia.",
+    sendAnother: "Send another",
   },
   shareText: "I got {score}/{total} on {title} — I'm a {tier}. {url}",
   tiers: [

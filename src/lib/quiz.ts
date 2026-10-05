@@ -22,6 +22,16 @@ export function buildGame(
     .map((q) => ({ ...q, answers: shuffle(q.answers, random) }));
 }
 
+/** A one-question game for the question with this id, or null if there is none. */
+export function gameForQuestion(
+  questions: readonly QuestionWithAnswers[],
+  id: string,
+  random = Math.random,
+): QuestionWithAnswers[] | null {
+  const found = questions.find((q) => q.id === id);
+  return found ? buildGame([found], 1, random) : null;
+}
+
 export function percentage(score: number, total: number): number {
   return total === 0 ? 0 : Math.round((score / total) * 100);
 }
@@ -80,4 +90,19 @@ export function filterByDifficulty(
   const included = includedDifficulties(difficulty, difficulties);
   const matching = questions.filter((q) => included.includes(q.difficulty));
   return matching.length > 0 ? matching : [...questions];
+}
+
+/**
+ * Picks a random phrase, avoiding `previous` so the same one never shows twice
+ * in a row (unless it is the only option).
+ */
+export function pickPhrase(
+  options: readonly string[],
+  previous?: string,
+  random = Math.random,
+): string {
+  const candidates =
+    options.length > 1 ? options.filter((o) => o !== previous) : options;
+  if (candidates.length === 0) return "";
+  return candidates[Math.floor(random() * candidates.length)];
 }
