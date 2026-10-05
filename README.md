@@ -35,9 +35,10 @@ Players pick a difficulty, answer a shuffled set of questions, learn something f
 | Answered | <img src="docs/screenshots/quiz-answered-desktop.png" width="360"> | <img src="docs/screenshots/quiz-answered-mobile.png" width="140"> |
 | Results | <img src="docs/screenshots/results-desktop.png" width="360"> | <img src="docs/screenshots/results-mobile.png" width="140"> |
 | Submit a question | <img src="docs/screenshots/submit-desktop.png" width="360"> | <img src="docs/screenshots/submit-mobile.png" width="140"> |
+| Leave feedback | <img src="docs/screenshots/feedback-desktop.png" width="360"> | <img src="docs/screenshots/feedback-mobile.png" width="140"> |
 | Credits | <img src="docs/screenshots/credits-desktop.png" width="360"> | <img src="docs/screenshots/credits-mobile.png" width="140"> |
 
-The admin page is not pictured because it lists real pending submissions.
+The admin page is not pictured because it lists real pending submissions and feedback notes.
 
 ## Tech stack
 
@@ -117,7 +118,7 @@ In development only, two shortcuts help with styling: `/quiz?score=7` jumps stra
 
 1. The home page reads the approved questions from the database and filters them by the chosen difficulty (`?difficulty=Easy|Medium|Hard`; an invalid value falls back to the default).
 2. `/quiz` builds a game: it shuffles the questions, optionally limits how many to play, and shuffles each question's answers. The quiz page opts out of static rendering so every visit gets a fresh shuffle.
-3. The player answers, sees the explanation, and at the end gets a score, a tier and a share text.
+3. The player answers, sees the explanation, and at the end gets a score and a tier, and can share the result as a picture.
 
 If no question matches the chosen difficulty, the full pool is used instead.
 
