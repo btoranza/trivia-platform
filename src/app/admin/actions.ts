@@ -137,3 +137,24 @@ export async function reviewSubmission(
 
   return { errors: {}, formError: config.form.errors.generic };
 }
+
+/** Moves a feedback note to the "read" list. */
+export async function markFeedbackHandled(id: string) {
+  if (!(await isAdmin())) redirect("/admin");
+  await db.feedback.updateMany({ where: { id }, data: { handled: true } });
+  revalidatePath("/admin");
+}
+
+/** Moves a read feedback note back to the unread list. */
+export async function markFeedbackUnread(id: string) {
+  if (!(await isAdmin())) redirect("/admin");
+  await db.feedback.updateMany({ where: { id }, data: { handled: false } });
+  revalidatePath("/admin");
+}
+
+/** Permanently removes a feedback note from the database. */
+export async function deleteFeedback(id: string) {
+  if (!(await isAdmin())) redirect("/admin");
+  await db.feedback.deleteMany({ where: { id } });
+  revalidatePath("/admin");
+}

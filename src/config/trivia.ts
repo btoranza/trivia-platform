@@ -27,6 +27,7 @@ export type TriviaConfig = {
     sticker: string;
     start: string;
     submit: string;
+    feedback: string;
     credit: string;
     next: string;
     seeResults: string;
@@ -37,6 +38,8 @@ export type TriviaConfig = {
     playAgain: string;
     share: string;
     copied: string;
+    saved: string;
+    sharing: string;
     questionPrefix: string;
     back: string;
     home: string;
@@ -74,6 +77,17 @@ export type TriviaConfig = {
       generic: string;
     };
   };
+  feedback: {
+    title: string;
+    intro: string;
+    message: string;
+    name: string;
+    submit: string;
+    sending: string;
+    successTitle: string;
+    successMessage: string;
+    sendAnother: string;
+  };
   /** Placeholders: {score}, {total}, {title}, {tier}, {url}. */
   shareText: string;
   credits: readonly CreditGroup[];
@@ -92,6 +106,7 @@ export const triviaConfig = {
     sticker: "NO GOOGLING",
     start: "START QUIZ",
     submit: "Submit a question",
+    feedback: "Leave feedback",
     credit: "made by Berenice",
     next: "NEXT",
     seeResults: "SEE RESULTS",
@@ -102,6 +117,8 @@ export const triviaConfig = {
     playAgain: "Play again",
     share: "SHARE",
     copied: "Copied!",
+    saved: "Saved!",
+    sharing: "...",
     questionPrefix: "Q",
     back: "Back home",
     home: "Home",
@@ -142,6 +159,18 @@ export const triviaConfig = {
       duplicateAnswers: "Answers must be different from each other.",
       generic: "Something went wrong. Please try again.",
     },
+  },
+  feedback: {
+    title: "Leave feedback",
+    intro:
+      "Spotted a mistake? Got an idea for the site? Tell us. Every note gets read.",
+    message: "Your note",
+    name: "Credit name (optional)",
+    submit: "SEND NOTE",
+    sending: "SENDING...",
+    successTitle: "Thanks!",
+    successMessage: "Your note is in. Thanks for helping improve the trivia.",
+    sendAnother: "Send another",
   },
   shareText: "I got {score}/{total} on {title} — I'm a {tier}. {url}",
   tiers: [

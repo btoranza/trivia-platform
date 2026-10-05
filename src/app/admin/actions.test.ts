@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => {
       findUniqueOrThrow: vi.fn(),
     },
     question: { create: vi.fn() },
+    feedback: { updateMany: vi.fn(), deleteMany: vi.fn() },
     $transaction: vi.fn(),
   };
   return {
@@ -24,7 +25,14 @@ vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
 
 import { triviaConfig } from "@/config/trivia";
 import { ADMIN_COOKIE, createSessionToken } from "@/lib/admin-auth";
-import { login, logout, reviewSubmission } from "@/app/admin/actions";
+import {
+  login,
+  logout,
+  deleteFeedback,
+  markFeedbackHandled,
+  markFeedbackUnread,
+  reviewSubmission,
+} from "@/app/admin/actions";
 
 const { db, cookieStore, redirect, revalidatePath } = mocks;
 
@@ -232,5 +240,70 @@ describe("reviewSubmission", () => {
       expect(state.formError).toBe(triviaConfig.form.errors.generic);
       expect(db.questionSubmission.updateMany).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe("markFeedbackHandled", () => {
+  it("redirects to the login when not signed in", async () => {
+    cookieStore.get.mockReturnValue(undefined);
+
+    await expect(markFeedbackHandled("fb-1")).rejects.toThrow(Redirect);
+    expect(db.feedback.updateMany).not.toHaveBeenCalled();
+  });
+
+  it("marks the note as handled and refreshes the admin page", async () => {
+    cookieStore.get.mockReturnValue({ value: createSessionToken() });
+    db.feedback.updateMany.mockResolvedValue({ count: 1 });
+
+    await markFeedbackHandled("fb-1");
+
+    expect(db.feedback.updateMany).toHaveBeenCalledWith({
+      where: { id: "fb-1" },
+      data: { handled: true },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/admin");
+  });
+});
+
+describe("markFeedbackUnread", () => {
+  it("redirects to the login when not signed in", async () => {
+    cookieStore.get.mockReturnValue(undefined);
+
+    await expect(markFeedbackUnread("fb-1")).rejects.toThrow(Redirect);
+    expect(db.feedback.updateMany).not.toHaveBeenCalled();
+  });
+
+  it("moves the note back to the unread list", async () => {
+    cookieStore.get.mockReturnValue({ value: createSessionToken() });
+    db.feedback.updateMany.mockResolvedValue({ count: 1 });
+
+    await markFeedbackUnread("fb-1");
+
+    expect(db.feedback.updateMany).toHaveBeenCalledWith({
+      where: { id: "fb-1" },
+      data: { handled: false },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/admin");
+  });
+});
+
+describe("deleteFeedback", () => {
+  it("does not delete anything when not signed in", async () => {
+    cookieStore.get.mockReturnValue(undefined);
+
+    await expect(deleteFeedback("fb-1")).rejects.toThrow(Redirect);
+    expect(db.feedback.deleteMany).not.toHaveBeenCalled();
+  });
+
+  it("deletes the note and refreshes the admin page", async () => {
+    cookieStore.get.mockReturnValue({ value: createSessionToken() });
+    db.feedback.deleteMany.mockResolvedValue({ count: 1 });
+
+    await deleteFeedback("fb-1");
+
+    expect(db.feedback.deleteMany).toHaveBeenCalledWith({
+      where: { id: "fb-1" },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/admin");
   });
 });
