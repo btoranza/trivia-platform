@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { triviaConfig as config, type ResultTier } from "@/config/trivia";
 import { formatTemplate } from "@/lib/quiz";
+import { shareImagePath } from "@/lib/share-image";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { HomeLink } from "./HomeLink";
@@ -15,28 +16,70 @@ type Props = {
   onRestart: () => void;
 };
 
-export function Results({ score, total, tier, onRestart }: Props) {
-  const [copied, setCopied] = useState(false);
+type ShareStatus = "idle" | "working" | "copied" | "saved";
 
+export function Results({ score, total, tier, onRestart }: Props) {
+  const [status, setStatus] = useState<ShareStatus>("idle");
+
+  function flash(next: "copied" | "saved") {
+    setStatus(next);
+    setTimeout(() => setStatus("idle"), 2000);
+  }
+
+  /** Shares the results picture; falls back to plain text if it fails. */
   async function share() {
-    const url = window.location.origin;
+    if (status === "working") return;
     const text = formatTemplate(config.shareText, {
       score,
       total,
       title: config.title,
       tier: tier.title,
-      url,
+      url: window.location.origin,
     });
+
+    setStatus("working");
+    try {
+      const res = await fetch(shareImagePath(score, total));
+      if (!res.ok) throw new Error(`Image request failed: ${res.status}`);
+      const blob = await res.blob();
+      const file = new File([blob], `${config.slug}-results.png`, {
+        type: "image/png",
+      });
+
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], text });
+        setStatus("idle");
+        return;
+      }
+      // No file sharing here (most desktops): save the picture instead.
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = file.name;
+      link.click();
+      URL.revokeObjectURL(link.href);
+      flash("saved");
+    } catch (err) {
+      // The share sheet was dismissed: nothing else to do.
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setStatus("idle");
+        return;
+      }
+      await shareText(text);
+    }
+  }
+
+  /** Last resort when the picture cannot be made or shared. */
+  async function shareText(text: string) {
     try {
       if (navigator.share) {
         await navigator.share({ text });
+        setStatus("idle");
       } else {
         await navigator.clipboard.writeText(text);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        flash("copied");
       }
     } catch {
-      // Share dialog dismissed or clipboard unavailable: nothing to do.
+      setStatus("idle");
     }
   }
 
@@ -61,7 +104,9 @@ export function Results({ score, total, tier, onRestart }: Props) {
             <h1 className="mt-1 font-display text-[30px] uppercase md:text-[38px] leading-none tracking-tight">
               {tier.title}
             </h1>
-            <p className="mt-2 text-base font-medium md:mt-3 md:text-lg">{tier.message}</p>
+            <p className="mt-2 text-base font-medium md:mt-3 md:text-lg">
+              {tier.message}
+            </p>
           </Card>
         </div>
       </div>
@@ -69,9 +114,15 @@ export function Results({ score, total, tier, onRestart }: Props) {
         <Button variant="secondary" onClick={onRestart}>
           {config.labels.playAgain}
         </Button>
-        <Button onClick={share}>
+        <Button onClick={share} aria-disabled={status === "working"}>
           <span aria-live="polite">
-            {copied ? config.labels.copied : config.labels.share}
+            {status === "working"
+              ? config.labels.sharing
+              : status === "copied"
+                ? config.labels.copied
+                : status === "saved"
+                  ? config.labels.saved
+                  : config.labels.share}
           </span>
         </Button>
       </div>
