@@ -95,6 +95,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 In development only, `/quiz?score=7` jumps straight to the results screen with a score of 7, which is handy for styling the tiers.
 
+Also in development only, `/quiz?question=<id>` plays a single question by its id, whatever its difficulty, which is handy for checking how one question looks.
+
 ## Scripts
 
 | Command | What it does |

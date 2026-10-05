@@ -5,6 +5,7 @@ import {
   buildGame,
   filterByDifficulty,
   formatTemplate,
+  gameForQuestion,
   getTier,
   includedDifficulties,
   parseDifficulty,
@@ -186,5 +187,24 @@ describe("pickPhrase", () => {
 
   it("returns an empty string for an empty list", () => {
     expect(pickPhrase([])).toBe("");
+  });
+});
+
+describe("gameForQuestion", () => {
+  const pool = ["1", "2", "3"].map((id) => question(id, "Easy"));
+
+  it("returns a one-question game with shuffled answers", () => {
+    const game = gameForQuestion(pool, "2");
+    expect(game).toHaveLength(1);
+    expect(game![0].id).toBe("2");
+    expect(game![0].answers.map((a) => a.id).sort()).toEqual([
+      "2-a",
+      "2-b",
+      "2-c",
+    ]);
+  });
+
+  it("returns null for an unknown id", () => {
+    expect(gameForQuestion(pool, "nope")).toBeNull();
   });
 });

@@ -4,7 +4,12 @@ import { HomeLink } from "@/components/HomeLink";
 import { Quiz } from "@/components/Quiz";
 import { triviaConfig as config } from "@/config/trivia";
 import { getQuestions } from "@/lib/questions";
-import { buildGame, filterByDifficulty, parseDifficulty } from "@/lib/quiz";
+import {
+  buildGame,
+  filterByDifficulty,
+  gameForQuestion,
+  parseDifficulty,
+} from "@/lib/quiz";
 
 export default async function QuizPage({ searchParams }: PageProps<"/quiz">) {
   // Opt out of static prerendering so each visit gets a fresh shuffle.
@@ -15,8 +20,9 @@ export default async function QuizPage({ searchParams }: PageProps<"/quiz">) {
     config.difficulties,
     config.defaultDifficulty,
   );
+  const allQuestions = await getQuestions(config.slug);
   const pool = filterByDifficulty(
-    await getQuestions(config.slug),
+    allQuestions,
     difficulty,
     config.difficulties,
   );
@@ -32,10 +38,17 @@ export default async function QuizPage({ searchParams }: PageProps<"/quiz">) {
       </main>
     );
   }
-  const initialGame = buildGame(pool, config.questionsPerGame);
+  const isDev = process.env.NODE_ENV === "development";
+  // Dev-only shortcut: /quiz?question=<id> plays just that question, whatever
+  // its difficulty.
+  const debugGame =
+    isDev && typeof params.question === "string"
+      ? gameForQuestion(allQuestions, params.question)
+      : null;
+  const initialGame = debugGame ?? buildGame(pool, config.questionsPerGame);
   // Dev-only shortcut: /quiz?score=8 jumps straight to the results screen.
   const debugScore =
-    process.env.NODE_ENV === "development" && typeof params.score === "string"
+    isDev && typeof params.score === "string"
       ? Math.min(initialGame.length, Math.max(0, Number(params.score) || 0))
       : undefined;
   return (
