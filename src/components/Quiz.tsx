@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { triviaConfig as config } from "@/config/trivia";
-import { buildGame, getTier } from "@/lib/quiz";
+import { buildGame, getTier, pickPhrase } from "@/lib/quiz";
 import type { QuestionWithAnswers } from "@/types/quiz";
 import { AnswerOption, type AnswerState } from "./AnswerOption";
 import { Button } from "./Button";
@@ -29,6 +29,9 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
   );
   const [pickedId, setPickedId] = useState<string | null>(null);
   const [score, setScore] = useState(debugScore ?? 0);
+  // Picked when answering (not while rendering) so SSR and client markup match.
+  const [heading, setHeading] = useState("");
+  const [lastHeading, setLastHeading] = useState({ right: "", wrong: "" });
 
   const total = game.length;
   const finished = index >= total;
@@ -55,12 +58,18 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
   const revealed = pickedId !== null;
   const isLast = index === total - 1;
   const hasExplanation = revealed;
-  const pickedCorrect = question.answers.some(
-    (a) => a.id === pickedId && a.isCorrect,
-  );
 
   function select(answerId: string, isCorrect: boolean) {
+    const kind = isCorrect ? "right" : "wrong";
+    const phrase = pickPhrase(
+      isCorrect
+        ? config.labels.explanationRight
+        : config.labels.explanationWrong,
+      lastHeading[kind],
+    );
     setPickedId(answerId);
+    setHeading(phrase);
+    setLastHeading({ ...lastHeading, [kind]: phrase });
     if (isCorrect) setScore((s) => s + 1);
   }
 
@@ -122,9 +131,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
           <div className="min-w-0 flex-1">
             <Card>
               <p className="text-xs font-bold uppercase tracking-wide">
-                {pickedCorrect
-                  ? config.labels.explanationRight
-                  : config.labels.explanationWrong}
+                {heading}
               </p>
               <p className="mt-1 text-sm font-medium">
                 <RichText text={question.explanation} />

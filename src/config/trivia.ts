@@ -41,10 +41,12 @@ export type TriviaConfig = {
     back: string;
     home: string;
     credits: string;
-    explanationRight: string;
+    /** Heading shown over the explanation after a correct answer; one is picked at random. */
+    explanationRight: readonly string[];
     difficultyInfo: string;
     submittedBy: string;
-    explanationWrong: string;
+    /** Same, after a wrong answer. */
+    explanationWrong: readonly string[];
     chooseDifficulty: string;
     noQuestions: string;
   };
@@ -104,10 +106,10 @@ export const triviaConfig = {
     back: "Back home",
     home: "Home",
     credits: "Credits",
-    explanationRight: "That's right!",
+    explanationRight: ["That's right!"],
     difficultyInfo: "{count} questions · {levels}",
     submittedBy: "Submitted by",
-    explanationWrong: "Did you know?",
+    explanationWrong: ["Did you know?"],
     chooseDifficulty: "Difficulty",
     noQuestions: "No questions yet. Check back soon!",
   },

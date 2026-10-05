@@ -9,6 +9,7 @@ import {
   includedDifficulties,
   parseDifficulty,
   percentage,
+  pickPhrase,
   shuffle,
 } from "@/lib/quiz";
 
@@ -165,5 +166,25 @@ describe("filterByDifficulty", () => {
     const onlyHard = [question("h", "Hard")];
     expect(filterByDifficulty(onlyHard, "Easy", difficulties)).toHaveLength(1);
     expect(filterByDifficulty(pool, "Nope", difficulties)).toHaveLength(3);
+  });
+});
+
+describe("pickPhrase", () => {
+  it("picks from the options", () => {
+    expect(pickPhrase(["a", "b", "c"], undefined, () => 0.5)).toBe("b");
+  });
+
+  it("never repeats the previous phrase", () => {
+    for (const r of [0, 0.4, 0.99]) {
+      expect(pickPhrase(["a", "b", "c"], "b", () => r)).not.toBe("b");
+    }
+  });
+
+  it("returns the only option even if it was the previous one", () => {
+    expect(pickPhrase(["a"], "a")).toBe("a");
+  });
+
+  it("returns an empty string for an empty list", () => {
+    expect(pickPhrase([])).toBe("");
   });
 });

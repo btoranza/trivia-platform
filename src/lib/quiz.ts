@@ -81,3 +81,18 @@ export function filterByDifficulty(
   const matching = questions.filter((q) => included.includes(q.difficulty));
   return matching.length > 0 ? matching : [...questions];
 }
+
+/**
+ * Picks a random phrase, avoiding `previous` so the same one never shows twice
+ * in a row (unless it is the only option).
+ */
+export function pickPhrase(
+  options: readonly string[],
+  previous?: string,
+  random = Math.random,
+): string {
+  const candidates =
+    options.length > 1 ? options.filter((o) => o !== previous) : options;
+  if (candidates.length === 0) return "";
+  return candidates[Math.floor(random() * candidates.length)];
+}
