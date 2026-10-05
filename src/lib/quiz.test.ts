@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ResultTier } from "@/config/trivia";
+import { triviaConfig, type ResultTier } from "@/config/trivia";
 import type { QuestionWithAnswers } from "@/types/quiz";
 import {
   buildGame,
@@ -206,5 +206,27 @@ describe("gameForQuestion", () => {
 
   it("returns null for an unknown id", () => {
     expect(gameForQuestion(pool, "nope")).toBeNull();
+  });
+});
+
+describe("the configured result tiers", () => {
+  const tiers = triviaConfig.tiers;
+
+  it("start at 0 and end at 100", () => {
+    expect(tiers[0].min).toBe(0);
+    expect(tiers[tiers.length - 1].max).toBe(100);
+  });
+
+  it("follow each other with no gaps or overlaps", () => {
+    for (let i = 1; i < tiers.length; i++) {
+      expect(tiers[i].min).toBe(tiers[i - 1].max + 1);
+    }
+  });
+
+  it("give every percentage from 0 to 100 exactly one tier", () => {
+    for (let pct = 0; pct <= 100; pct++) {
+      const matches = tiers.filter((t) => pct >= t.min && pct <= t.max);
+      expect(matches).toHaveLength(1);
+    }
   });
 });
