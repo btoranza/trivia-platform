@@ -3,10 +3,12 @@ import { connection } from "next/server";
 import { AdminLoginForm } from "@/components/AdminLoginForm";
 import { AdminReviewForm } from "@/components/AdminReviewForm";
 import { Card } from "@/components/Card";
+import { PlayStatsPanel } from "@/components/PlayStats";
 import { HomeLink } from "@/components/HomeLink";
 import { triviaConfig as config } from "@/config/trivia";
 import { getAdminPassword, isAdmin } from "@/lib/admin-auth";
 import { db } from "@/lib/db";
+import { summarizePlays } from "@/lib/plays";
 import { Button } from "@/components/Button";
 import { ConfirmDelete } from "@/components/ConfirmDelete";
 import {
@@ -56,6 +58,17 @@ export default async function AdminPage() {
     where: { quiz: { slug: config.slug } },
     orderBy: { createdAt: "asc" },
   });
+  const plays = await db.quizPlay.findMany({
+    where: { quiz: { slug: config.slug } },
+    select: {
+      score: true,
+      total: true,
+      random: true,
+      difficulty: true,
+      createdAt: true,
+    },
+  });
+  const stats = summarizePlays(plays, config.tiers, config.difficulties);
   const unread = notes.filter((n) => !n.handled);
   const read = notes.filter((n) => n.handled).toReversed();
 
@@ -115,6 +128,10 @@ export default async function AdminPage() {
           </div>
         </details>
       )}
+      <h2 className="font-display text-2xl uppercase leading-none tracking-tight">
+        Stats
+      </h2>
+      <PlayStatsPanel stats={stats} />
     </Shell>
   );
 }

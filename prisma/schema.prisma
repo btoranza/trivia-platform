@@ -17,6 +17,7 @@ model Quiz {
   questions   Question[]
   submissions QuestionSubmission[]
   feedback    Feedback[]
+  plays       QuizPlay[]
 }
 
 model Question {
@@ -82,4 +83,21 @@ model Feedback {
   quiz Quiz @relation(fields: [quizId], references: [id])
 
   @@index([quizId])
+}
+
+/// One finished game. Nothing about the player is stored, only the result.
+model QuizPlay {
+  id         String   @id @default(cuid())
+  quizId     String
+  score      Int
+  total      Int
+  /// True when it was a random-mode game (mixes every level).
+  random     Boolean
+  /// The level chosen for a level game; null in random mode.
+  difficulty String?
+  createdAt  DateTime @default(now())
+
+  quiz Quiz @relation(fields: [quizId], references: [id])
+
+  @@index([quizId, createdAt])
 }

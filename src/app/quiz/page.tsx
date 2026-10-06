@@ -44,6 +44,9 @@ export default async function QuizPage({ searchParams }: PageProps<"/quiz">) {
       questions={pool}
       initialGame={initialGame}
       gameLength={setup.length}
+      random={setup.random}
+      difficulty={setup.difficulty}
+      trackPlays={!debugGame && debugScore === undefined}
       debugScore={debugScore}
     />
   );

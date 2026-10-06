@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { recordPlay } from "@/app/quiz/actions";
 import { triviaConfig as config } from "@/config/trivia";
 import { buildGame, getTier, pickPhrase } from "@/lib/quiz";
 import type { QuestionWithAnswers } from "@/types/quiz";
@@ -20,6 +21,11 @@ type Props = {
   initialGame: QuestionWithAnswers[];
   /** Questions per game, kept when playing again; null plays them all. */
   gameLength: number | null;
+  /** What is being played, saved with the result in the play statistics. */
+  random: boolean;
+  difficulty: string;
+  /** False for the development shortcuts, so they do not count as games. */
+  trackPlays: boolean;
   /** Dev shortcut: start on the results screen with this score. */
   debugScore?: number;
 };
@@ -28,6 +34,9 @@ export function Quiz({
   questions,
   initialGame,
   gameLength,
+  random,
+  difficulty,
+  trackPlays,
   debugScore,
 }: Props) {
   const [game, setGame] = useState(initialGame);
@@ -81,6 +90,10 @@ export function Quiz({
   }
 
   function next() {
+    // Last question: the game is over, so count it (without waiting for it).
+    if (isLast && trackPlays) {
+      void recordPlay({ score, total, random, difficulty }).catch(() => {});
+    }
     setIndex((i) => i + 1);
     setPickedId(null);
   }
