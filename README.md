@@ -23,6 +23,7 @@ Players pick a difficulty, answer a shuffled set of questions, learn something f
 - **Public submission form** with validation and a honeypot field against bots. Submissions are stored as pending.
 - **Admin page** (password protected) to edit a submission with a live preview, then save, approve or reject it.
 - **Feedback page** (`/feedback`): anyone can leave a note or recommendation, with an optional name. Notes are stored in the database and listed in `/admin`, where they can be marked as read (they move to a collapsible "Read notes" list), marked as unread again, or deleted for good after a confirmation.
+- **Play statistics** in `/admin`: games played (all time, last 24 hours, last 7 days), average score, level versus random mode, and how many games reached each rank. Nothing about the player is stored.
 - **Optional Discord notifications**: a short message with a link to `/admin` when a question or a note arrives (see [Notifications](#notifications-optional)).
 - **Credits page** built from the credit names of approved questions. Anonymous questions are left out.
 - **Responsive**: a compact layout on phones, designed so most screens fit without vertical scrolling (the submission form is the exception), and a roomier two-column layout on desktop.
@@ -149,6 +150,15 @@ If no question matches the chosen difficulty, the full pool is used instead.
 - In `/admin`, unread notes are listed under **Feedback**. **Mark as read** moves a note to a collapsible **Read notes** list, where it stays stored and can be marked as unread again.
 - **Delete** removes a note from the database for good, after a confirmation dialog.
 
+### Play statistics
+
+When a game ends (the player presses SEE RESULTS on the last question), the browser sends the result to the server, which saves one `QuizPlay` row: score, total, whether it was random mode, the level (null in random mode) and the time. **No name, address, cookie or identifier is stored.** The numbers are shown in `/admin` under **Stats**, worked out by [src/lib/plays.ts](src/lib/plays.ts).
+
+- Results are checked before saving (whole numbers, score not above total, a known level), so the endpoint only keeps plausible games. It is a public action, so anyone could still send made-up games: treat the numbers as an approximation, not as an audit.
+- Saving never blocks the results screen, and a failure is only logged.
+- The development shortcuts (`?score=` and `?question=`) do not count as games.
+- Site visits are not tracked here. For that, see Vercel's Web Analytics.
+
 ### Share image and link preview
 
 - `GET /api/share-image?score=42&total=48` draws the results picture with [next/og](https://nextjs.org/docs/app/api-reference/functions/image-response). The tier is worked out on the server from the score, so the address cannot be used to put arbitrary text in the image. Invalid values answer 400 (see [src/lib/share-image.ts](src/lib/share-image.ts)). The picture only depends on the query string, so it is cached for a year.
@@ -211,6 +221,7 @@ The unit tests live next to the code they cover, in `src/lib/`:
 | [submissions.test.ts](src/lib/submissions.test.ts) | Form validation: required fields, length limits, duplicate answers, difficulty, credit name |
 | [quiz-setup.test.ts](src/lib/quiz-setup.test.ts) | Level and random modes: reading the address, the question pool, the offered lengths and the fallback |
 | [quiz.test.ts](src/lib/quiz.test.ts) | Shuffling and game building, random answer phrases, the single-question game, score percentage, result tiers (including that they cover 0–100), difficulty filtering, templates |
+| [plays.test.ts](src/lib/plays.test.ts) | Checking a finished game before it is saved, and the statistics worked out from stored games |
 | [feedback.test.ts](src/lib/feedback.test.ts) | Feedback validation: required message, length limits, anonymous and blank names |
 | [share-image.test.ts](src/lib/share-image.test.ts) | Score parameters accepted and rejected for the results picture |
 | [image-theme.test.ts](src/lib/image-theme.test.ts) | The image colors match the tokens in `globals.css` |
@@ -224,6 +235,7 @@ The server actions are tested with the database and the Next.js helpers (`cookie
 | File | Covers |
 | --- | --- |
 | [submit/actions.test.ts](src/app/submit/actions.test.ts) | Saving a pending submission, validation errors, the honeypot, database failures, notifications |
+| [quiz/actions.test.ts](src/app/quiz/actions.test.ts) | Saving a finished game: valid results only, no extra fields, never throwing |
 | [feedback/actions.test.ts](src/app/feedback/actions.test.ts) | Saving a note, validation errors, the honeypot, database failures, notifications |
 | [admin/actions.test.ts](src/app/admin/actions.test.ts) | Login and logout, access without a session, save / approve / reject, approving only once, and feedback read / unread / delete |
 
@@ -241,14 +253,14 @@ npx next typegen && npx tsc --noEmit && npm run lint && npm test
 
 ```
 prisma/
-  schema.prisma        Quiz, Question, Answer, QuestionSubmission and Feedback models
+  schema.prisma        Quiz, Question, Answer, QuestionSubmission, Feedback and QuizPlay models
   migrations/          SQL migrations
   seed.ts              Creates the quiz and loads the curated questions
   questions/           Curated questions as JSON
 src/
   app/
     page.tsx           Home
-    quiz/              The game
+    quiz/              The game and the action that saves a finished game
     submit/            Submission form and its server action
     admin/             Review page and its server actions
     credits/           Credits page
