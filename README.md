@@ -15,6 +15,7 @@ Players pick a difficulty, answer a shuffled set of questions, learn something f
 
 - **Quiz** with Easy / Medium / Hard levels. Levels are cumulative: Medium includes the Easy questions, Hard includes everything.
 - **Shuffled every game**: question order and answer order.
+- **Random mode**: a fourth choice next to the levels that mixes questions from every level and lets the player pick how many (10, 20, 30 or all). Choosing it swaps the level chips for the question counts plus a "‹ Levels" chip that goes back to the level the player was on, so the card never changes height.
 - **Explanations** after each answer, with the author's credit when there is one.
 - **Result tiers and sharing**: a score badge, a tier title and a share button. Sharing creates a 1080×1920 picture of the result: on phones it opens the share sheet with the image attached, on computers it saves the PNG, and if the picture fails it falls back to plain text.
 - **Link preview**: pasting the site's address in a chat or a post shows a card with the title and the logo.
@@ -31,6 +32,7 @@ Players pick a difficulty, answer a shuffled set of questions, learn something f
 | Screen | Desktop | Mobile |
 | --- | --- | --- |
 | Home | <img src="docs/screenshots/home-desktop.png" width="360"> | <img src="docs/screenshots/home-mobile.png" width="140"> |
+| Random mode | <img src="docs/screenshots/random-desktop.png" width="360"> | <img src="docs/screenshots/random-mobile.png" width="140"> |
 | Question | <img src="docs/screenshots/quiz-question-desktop.png" width="360"> | <img src="docs/screenshots/quiz-question-mobile.png" width="140"> |
 | Answered | <img src="docs/screenshots/quiz-answered-desktop.png" width="360"> | <img src="docs/screenshots/quiz-answered-mobile.png" width="140"> |
 | Results | <img src="docs/screenshots/results-desktop.png" width="360"> | <img src="docs/screenshots/results-mobile.png" width="140"> |
@@ -122,6 +124,8 @@ In development only, two shortcuts help with styling: `/quiz?score=7` jumps stra
 
 If no question matches the chosen difficulty, the full pool is used instead.
 
+**Random mode** (`/?mode=random&count=20`): the pool is every approved question, whatever its level, and the game takes `count` of them at random. `count` can be one of the `random.lengths` in the config or `all`; any other value falls back to `random.defaultLength`. "Play again" keeps the same length. The home address also carries `difficulty` (`/?mode=random&count=20&difficulty=Hard`) only so that "‹ Levels" can return to that level. The rules for reading the address live in [src/lib/quiz-setup.ts](src/lib/quiz-setup.ts).
+
 ### Submitting and reviewing questions
 
 ```
@@ -167,7 +171,8 @@ Almost all text and settings live in [src/config/trivia.ts](src/config/trivia.ts
 
 - `slug`, `title`, `description`
 - `difficulties` (ordered from easiest to hardest) and `defaultDifficulty`
-- `questionsPerGame` (a number, or `null` to play every question)
+- `questionsPerGame` (a number, or `null` to play every question, for the level modes)
+- `random`: the label, the offered question counts and the default one for random mode
 - every label, the form copy (for questions and for feedback) and its error messages (`explanationRight` and `explanationWrong` are lists: one phrase is picked at random after each answer, never the same twice in a row)
 - `credits` groups (a group with `fromQuestions: true` is filled from the approved questions' credit names)
 - result `tiers` (inclusive percentage ranges) and the `shareText` template
@@ -204,6 +209,7 @@ The unit tests live next to the code they cover, in `src/lib/`:
 | File | Covers |
 | --- | --- |
 | [submissions.test.ts](src/lib/submissions.test.ts) | Form validation: required fields, length limits, duplicate answers, difficulty, credit name |
+| [quiz-setup.test.ts](src/lib/quiz-setup.test.ts) | Level and random modes: reading the address, the question pool, the offered lengths and the fallback |
 | [quiz.test.ts](src/lib/quiz.test.ts) | Shuffling and game building, random answer phrases, the single-question game, score percentage, result tiers (including that they cover 0–100), difficulty filtering, templates |
 | [feedback.test.ts](src/lib/feedback.test.ts) | Feedback validation: required message, length limits, anonymous and blank names |
 | [share-image.test.ts](src/lib/share-image.test.ts) | Score parameters accepted and rejected for the results picture |
@@ -252,7 +258,7 @@ src/
   components/          UI building blocks (Quiz, Results, SubmitForm, AdminReviewForm, ...)
   config/trivia.ts     Texts, difficulties, tiers and other settings
   assets/fonts/        TTF fonts for the generated images
-  lib/                 Game logic, validation, admin auth, notifications, share image, database access
+  lib/                 Game logic, quiz setup (level and random modes), validation, admin auth, notifications, share image, database access
   types/               Shared types
 docs/screenshots/      Images used in this README
 ```
