@@ -18,11 +18,18 @@ type Props = {
   questions: QuestionWithAnswers[];
   /** First game, shuffled on the server so SSR and client markup match. */
   initialGame: QuestionWithAnswers[];
+  /** Questions per game, kept when playing again; null plays them all. */
+  gameLength: number | null;
   /** Dev shortcut: start on the results screen with this score. */
   debugScore?: number;
 };
 
-export function Quiz({ questions, initialGame, debugScore }: Props) {
+export function Quiz({
+  questions,
+  initialGame,
+  gameLength,
+  debugScore,
+}: Props) {
   const [game, setGame] = useState(initialGame);
   const [index, setIndex] = useState(
     debugScore === undefined ? 0 : initialGame.length,
@@ -37,7 +44,7 @@ export function Quiz({ questions, initialGame, debugScore }: Props) {
   const finished = index >= total;
 
   function restart() {
-    setGame(buildGame(questions, config.questionsPerGame));
+    setGame(buildGame(questions, gameLength));
     setIndex(0);
     setPickedId(null);
     setScore(0);

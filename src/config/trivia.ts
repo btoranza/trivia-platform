@@ -23,6 +23,20 @@ export type TriviaConfig = {
   difficulties: readonly string[];
   /** Preselected on the Home screen; must be one of `difficulties`. */
   defaultDifficulty: string;
+  /** Random mode: mixes every level and lets the player pick how many questions. */
+  random: {
+    label: string;
+    /** Chip that leaves random mode and goes back to the levels. */
+    backLabel: string;
+    /** Accessible name of the group of counts. */
+    lengthLabel: string;
+    allLabel: string;
+    /** Choices offered besides "All"; `defaultLength` must be one of them. */
+    lengths: readonly number[];
+    defaultLength: number;
+    /** Placeholder: {count}. */
+    info: string;
+  };
   labels: {
     sticker: string;
     start: string;
@@ -102,6 +116,15 @@ export const triviaConfig = {
   questionsPerGame: null,
   difficulties: ["Easy", "Medium", "Hard"],
   defaultDifficulty: "Medium",
+  random: {
+    label: "Random",
+    backLabel: "‹ Levels",
+    lengthLabel: "Questions",
+    allLabel: "All",
+    lengths: [10, 20, 30],
+    defaultLength: 20,
+    info: "Random: {count} questions · all levels",
+  },
   labels: {
     sticker: "NO GOOGLING",
     start: "START QUIZ",

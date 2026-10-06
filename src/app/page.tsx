@@ -2,36 +2,37 @@ import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { DifficultyPicker } from "@/components/DifficultyPicker";
+import { LengthPicker } from "@/components/LengthPicker";
 import { Sticker } from "@/components/Sticker";
 import { triviaConfig as config } from "@/config/trivia";
 import { getQuestions } from "@/lib/questions";
+import { formatTemplate, includedDifficulties } from "@/lib/quiz";
 import {
-  filterByDifficulty,
-  formatTemplate,
-  includedDifficulties,
-  parseDifficulty,
-} from "@/lib/quiz";
+  parseSetup,
+  poolFor,
+  randomHomeHref,
+  setupQuery,
+} from "@/lib/quiz-setup";
 
 export default async function Home({ searchParams }: PageProps<"/">) {
-  const difficulty = parseDifficulty(
-    (await searchParams).difficulty,
-    config.difficulties,
-    config.defaultDifficulty,
-  );
-  const pool = filterByDifficulty(
+  const setup = parseSetup(await searchParams, config);
+  const pool = poolFor(
     await getQuestions(config.slug),
-    difficulty,
+    setup,
     config.difficulties,
   );
   const count =
-    config.questionsPerGame === null
-      ? pool.length
-      : Math.min(pool.length, config.questionsPerGame);
-  const difficultyInfo = formatTemplate(config.labels.difficultyInfo, {
-    count,
-    levels: includedDifficulties(difficulty, config.difficulties).join(" + "),
-  });
-  const quizHref = `/quiz?difficulty=${encodeURIComponent(difficulty)}`;
+    setup.length === null ? pool.length : Math.min(pool.length, setup.length);
+  const info = setup.random
+    ? formatTemplate(config.random.info, { count })
+    : formatTemplate(config.labels.difficultyInfo, {
+        count,
+        levels: includedDifficulties(
+          setup.difficulty,
+          config.difficulties,
+        ).join(" + "),
+      });
+  const quizHref = `/quiz?${setupQuery(setup)}`;
   return (
     <main className="flex flex-1 flex-col justify-center gap-4 md:grid md:justify-normal md:flex-none md:grid-cols-2 md:content-center md:gap-x-14 md:gap-y-6 md:my-auto">
       <div className="flex flex-col gap-4 md:gap-6 md:col-start-1 md:row-span-3 md:justify-center">
@@ -49,12 +50,28 @@ export default async function Home({ searchParams }: PageProps<"/">) {
       <div className="md:col-start-2">
         <Card>
           <p className="text-lg font-bold md:text-xl">{config.description}</p>
-          <DifficultyPicker
-            label={config.labels.chooseDifficulty}
-            options={config.difficulties}
-            selected={difficulty}
-          />
-          <p className="mt-3 text-sm font-bold">{difficultyInfo}</p>
+          {setup.random ? (
+            <LengthPicker
+              label={config.random.lengthLabel}
+              backLabel={config.random.backLabel}
+              allLabel={config.random.allLabel}
+              lengths={config.random.lengths}
+              selected={setup.length}
+              difficulty={setup.difficulty}
+            />
+          ) : (
+            <DifficultyPicker
+              label={config.labels.chooseDifficulty}
+              options={config.difficulties}
+              selected={setup.difficulty}
+              randomLabel={config.random.label}
+              randomHref={randomHomeHref(
+                setup.difficulty,
+                config.random.defaultLength,
+              )}
+            />
+          )}
+          <p className="mt-3 text-sm font-bold">{info}</p>
         </Card>
       </div>
       <div className="flex flex-col gap-3 md:col-start-2 md:gap-4">

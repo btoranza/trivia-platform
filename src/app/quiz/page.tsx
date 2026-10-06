@@ -4,28 +4,16 @@ import { HomeLink } from "@/components/HomeLink";
 import { Quiz } from "@/components/Quiz";
 import { triviaConfig as config } from "@/config/trivia";
 import { getQuestions } from "@/lib/questions";
-import {
-  buildGame,
-  filterByDifficulty,
-  gameForQuestion,
-  parseDifficulty,
-} from "@/lib/quiz";
+import { buildGame, gameForQuestion } from "@/lib/quiz";
+import { parseSetup, poolFor } from "@/lib/quiz-setup";
 
 export default async function QuizPage({ searchParams }: PageProps<"/quiz">) {
   // Opt out of static prerendering so each visit gets a fresh shuffle.
   await connection();
   const params = await searchParams;
-  const difficulty = parseDifficulty(
-    params.difficulty,
-    config.difficulties,
-    config.defaultDifficulty,
-  );
+  const setup = parseSetup(params, config);
   const allQuestions = await getQuestions(config.slug);
-  const pool = filterByDifficulty(
-    allQuestions,
-    difficulty,
-    config.difficulties,
-  );
+  const pool = poolFor(allQuestions, setup, config.difficulties);
   if (pool.length === 0) {
     return (
       <main className="mx-auto flex w-full flex-1 flex-col gap-6 md:max-w-2xl">
@@ -45,13 +33,18 @@ export default async function QuizPage({ searchParams }: PageProps<"/quiz">) {
     isDev && typeof params.question === "string"
       ? gameForQuestion(allQuestions, params.question)
       : null;
-  const initialGame = debugGame ?? buildGame(pool, config.questionsPerGame);
+  const initialGame = debugGame ?? buildGame(pool, setup.length);
   // Dev-only shortcut: /quiz?score=8 jumps straight to the results screen.
   const debugScore =
     isDev && typeof params.score === "string"
       ? Math.min(initialGame.length, Math.max(0, Number(params.score) || 0))
       : undefined;
   return (
-    <Quiz questions={pool} initialGame={initialGame} debugScore={debugScore} />
+    <Quiz
+      questions={pool}
+      initialGame={initialGame}
+      gameLength={setup.length}
+      debugScore={debugScore}
+    />
   );
 }
