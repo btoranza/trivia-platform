@@ -25,7 +25,7 @@ Players pick a difficulty, answer a shuffled set of questions, learn something f
 - **Feedback page** (`/feedback`): anyone can leave a note or recommendation, with an optional name. Notes are stored in the database and listed in `/admin`, where they can be marked as read (they move to a collapsible "Read notes" list), marked as unread again, or deleted for good after a confirmation.
 - **Play statistics** in `/admin`: games played (all time, last 24 hours, last 7 days), average score, level versus random mode, and how many games reached each rank. Nothing about the player is stored.
 - **Optional Discord notifications**: a short message with a link to `/admin` when a question or a note arrives (see [Notifications](#notifications-optional)).
-- **Credits page** built from the credit names of approved questions. Anonymous questions are left out.
+- **Credits page** with groups set in the config (the developer) plus the credit names of approved questions. Anonymous questions are left out.
 - **Responsive**: a compact layout on phones, designed so most screens fit without vertical scrolling (the submission form is the exception), and a roomier two-column layout on desktop.
 
 ## Screenshots
@@ -81,7 +81,7 @@ ADMIN_PASSWORD="choose-something-long"
 | `DATABASE_URL` | Yes | PostgreSQL connection string. With Neon, copy it from the dashboard (**Connect**) and prefer the pooled connection. |
 | `ADMIN_PASSWORD` | For `/admin` | Password for the admin page. If it is not set, the admin area stays closed and nobody can log in. |
 | `DISCORD_WEBHOOK_URL` | No | Discord channel webhook for new-question and new-note alerts. Leave it out locally to keep development quiet. |
-| `SITE_URL` | No | Public address used in those alerts and in the link-preview image URLs. Defaults to the production domain Vercel provides. |
+| `SITE_URL` | No | Public address used in those alerts and in the link-preview image URLs. Defaults to the production domain Vercel provides (its `VERCEL_PROJECT_PRODUCTION_URL` variable, which you do not set yourself). |
 
 The app makes the pg SSL mode explicit: `sslmode=prefer`, `require` and `verify-ca` are treated as `verify-full`, which is what `pg` does today (see [src/lib/db-url.ts](src/lib/db-url.ts)).
 
