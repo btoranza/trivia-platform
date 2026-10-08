@@ -136,8 +136,8 @@ describe("summarizePlays", () => {
     const highest = tiers[tiers.length - 1].title;
     const s = summarizePlays(
       [
-        play(10, 10, false, "Hard", 1),
-        play(10, 10, true, null, 1),
+        play(30, 30, false, "Hard", 1),
+        play(30, 30, true, null, 1),
         play(0, 10, true, null, 1),
       ],
       tiers,

@@ -13,12 +13,14 @@ type Props = {
   score: number;
   total: number;
   tier: ResultTier;
+  /** The tier the score would have earned in a longer game, if any. */
+  locked: ResultTier | null;
   onRestart: () => void;
 };
 
 type ShareStatus = "idle" | "working" | "copied" | "saved";
 
-export function Results({ score, total, tier, onRestart }: Props) {
+export function Results({ score, total, tier, locked, onRestart }: Props) {
   const [status, setStatus] = useState<ShareStatus>("idle");
 
   function flash(next: "copied" | "saved") {
@@ -107,6 +109,14 @@ export function Results({ score, total, tier, onRestart }: Props) {
             <p className="mt-2 text-base font-medium md:mt-3 md:text-lg">
               {tier.message}
             </p>
+            {locked && (
+              <p className="mt-3 text-sm font-bold md:text-base">
+                {formatTemplate(config.labels.tierLocked, {
+                  tier: locked.title,
+                  needed: locked.minQuestions ?? 0,
+                })}
+              </p>
+            )}
           </Card>
         </div>
       </div>

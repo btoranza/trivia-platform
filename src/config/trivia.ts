@@ -4,6 +4,11 @@ export type ResultTier = {
   max: number;
   title: string;
   message: string;
+  /**
+   * Games shorter than this cannot earn the tier, however high the score:
+   * they get the best tier below it. Leave out for no minimum.
+   */
+  minQuestions?: number;
 };
 
 export type CreditGroup = {
@@ -49,6 +54,8 @@ export type TriviaConfig = {
     wrong: string;
     resultsSuffix: string;
     youAreA: string;
+    /** Placeholders: {tier}, {needed}. Shown when a short game caps the tier. */
+    tierLocked: string;
     playAgain: string;
     share: string;
     copied: string;
@@ -137,6 +144,8 @@ export const triviaConfig = {
     wrong: "NOPE",
     resultsSuffix: "RESULTS",
     youAreA: "YOU ARE A",
+    tierLocked:
+      "That score is {tier} material, but it takes {needed}+ questions to earn it.",
     playAgain: "Play again",
     share: "SHARE",
     copied: "Copied!",
@@ -225,6 +234,7 @@ export const triviaConfig = {
     {
       min: 100,
       max: 100,
+      minQuestions: 25,
       title: "Compiler",
       message: "Zero errors, zero warnings. Are you even human?",
     },

@@ -7,6 +7,7 @@ import {
   formatTemplate,
   gameForQuestion,
   getTier,
+  rankResult,
   includedDifficulties,
   parseDifficulty,
   percentage,
@@ -119,6 +120,44 @@ describe("getTier", () => {
       { min: 90, max: 100, title: "b", message: "" },
     ];
     expect(getTier(gap, 5, 10).title).toBe("b");
+  });
+});
+
+describe("tiers with a minimum game length", () => {
+  const tiers: ResultTier[] = [
+    { min: 0, max: 80, title: "low", message: "" },
+    { min: 81, max: 99, title: "high", message: "", minQuestions: 15 },
+    { min: 100, max: 100, title: "top", message: "", minQuestions: 30 },
+  ];
+
+  it("gives a short perfect game the best tier it is long enough for", () => {
+    expect(getTier(tiers, 10, 10).title).toBe("low");
+    expect(getTier(tiers, 20, 20).title).toBe("high");
+    expect(getTier(tiers, 30, 30).title).toBe("top");
+    expect(getTier(tiers, 54, 54).title).toBe("top");
+  });
+
+  it("reports the tier the short game missed", () => {
+    expect(rankResult(tiers, 10, 10).locked?.title).toBe("top");
+    expect(rankResult(tiers, 20, 20).locked?.title).toBe("top");
+    expect(rankResult(tiers, 10, 10).tier.title).toBe("low");
+  });
+
+  it("reports nothing when the game was long enough", () => {
+    expect(rankResult(tiers, 30, 30).locked).toBeNull();
+    expect(rankResult(tiers, 5, 10).locked).toBeNull();
+  });
+
+  it("does not lock tiers without a minimum", () => {
+    expect(getTier(tiers, 2, 2).title).toBe("low");
+    expect(rankResult(tiers, 1, 1).locked?.title).toBe("top");
+  });
+
+  it("never drops below the first tier", () => {
+    const strict: ResultTier[] = [
+      { min: 0, max: 100, title: "only", message: "", minQuestions: 50 },
+    ];
+    expect(getTier(strict, 3, 3).title).toBe("only");
   });
 });
 

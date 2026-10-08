@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { recordPlay } from "@/app/quiz/actions";
 import { triviaConfig as config } from "@/config/trivia";
-import { buildGame, getTier, pickPhrase } from "@/lib/quiz";
+import { buildGame, pickPhrase, rankResult } from "@/lib/quiz";
 import type { QuestionWithAnswers } from "@/types/quiz";
 import { AnswerOption, type AnswerState } from "./AnswerOption";
 import { Button } from "./Button";
@@ -60,11 +60,13 @@ export function Quiz({
   }
 
   if (finished) {
+    const { tier, locked } = rankResult(config.tiers, score, total);
     return (
       <Results
         score={score}
         total={total}
-        tier={getTier(config.tiers, score, total)}
+        tier={tier}
+        locked={locked}
         onRestart={restart}
       />
     );

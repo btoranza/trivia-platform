@@ -36,15 +36,34 @@ export function percentage(score: number, total: number): number {
   return total === 0 ? 0 : Math.round((score / total) * 100);
 }
 
+/**
+ * The tier a score earns. The percentage picks it, but a tier with a
+ * `minQuestions` needs a long enough game: a short one gets the best tier
+ * below it. `locked` is the tier the percentage alone would have given, when
+ * the game was too short for it.
+ */
+export function rankResult(
+  tiers: readonly ResultTier[],
+  score: number,
+  total: number,
+): { tier: ResultTier; locked: ResultTier | null } {
+  const pct = percentage(score, total);
+  const found = tiers.findIndex((t) => pct >= t.min && pct <= t.max);
+  const byPercent = found === -1 ? tiers.length - 1 : found;
+  let earned = byPercent;
+  while (earned > 0 && total < (tiers[earned].minQuestions ?? 0)) earned--;
+  return {
+    tier: tiers[earned],
+    locked: earned === byPercent ? null : tiers[byPercent],
+  };
+}
+
 export function getTier(
   tiers: readonly ResultTier[],
   score: number,
   total: number,
 ): ResultTier {
-  const pct = percentage(score, total);
-  return (
-    tiers.find((t) => pct >= t.min && pct <= t.max) ?? tiers[tiers.length - 1]
-  );
+  return rankResult(tiers, score, total).tier;
 }
 
 export function formatTemplate(

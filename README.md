@@ -17,7 +17,7 @@ Players pick a difficulty, answer a shuffled set of questions, learn something f
 - **Shuffled every game**: question order and answer order.
 - **Random mode**: a fourth choice next to the levels that mixes questions from every level and lets the player pick how many (10, 20, 30 or all). Choosing it swaps the level chips for the question counts plus a "‹ Levels" chip that goes back to the level the player was on, so the card never changes height.
 - **Explanations** after each answer, with the author's credit when there is one.
-- **Result tiers and sharing**: a score badge, a tier title and a share button. Sharing creates a 1080×1920 picture of the result: on phones it opens the share sheet with the image attached, on computers it saves the PNG, and if the picture fails it falls back to plain text.
+- **Result tiers and sharing**: a score badge, a tier title and a share button. The top tier ("Compiler") also asks for at least 25 questions, so a perfect 10/10 does not rank like a perfect run through every question; short games are told which tier they missed. Sharing creates a 1080×1920 picture of the result: on phones it opens the share sheet with the image attached, on computers it saves the PNG, and if the picture fails it falls back to plain text.
 - **Link preview**: pasting the site's address in a chat or a post shows a card with the title and the logo.
 - **Inline code and code blocks** in questions, answers and explanations, using `` `backticks` `` and fenced blocks.
 - **Public submission form** with validation and a honeypot field against bots. Submissions are stored as pending.
@@ -185,7 +185,7 @@ Almost all text and settings live in [src/config/trivia.ts](src/config/trivia.ts
 - `random`: the label, the offered question counts and the default one for random mode
 - every label, the form copy (for questions and for feedback) and its error messages (`explanationRight` and `explanationWrong` are lists: one phrase is picked at random after each answer, never the same twice in a row)
 - `credits` groups (a group with `fromQuestions: true` is filled from the approved questions' credit names)
-- result `tiers` (inclusive percentage ranges) and the `shareText` template
+- result `tiers` (inclusive percentage ranges, plus an optional `minQuestions` for tiers that need a longer game) and the `shareText` template
 
 The `slug` must match the quiz row in the database; the seed creates it from this config.
 
